@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Committee__c</fullName>
+    <externalId>false</externalId>
+    <label>Committee</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Committee Application</fullName>
+                <default>false</default>
+                <label>Committee Application</label>
+            </value>
+            <value>
+                <fullName>Cybersecurity, Privacy &amp; Security</fullName>
+                <default>false</default>
+                <label>Cybersecurity, Privacy &amp; Security</label>
+            </value>
+            <value>
+                <fullName>Digital Health Advisory Group for Europe</fullName>
+                <default>false</default>
+                <label>Digital Health Advisory Group for Europe</label>
+            </value>
+            <value>
+                <fullName>Global Health Conference Education</fullName>
+                <default>false</default>
+                <label>Global Health Conference Education</label>
+            </value>
+            <value>
+                <fullName>HIMSS Professional Certification Board</fullName>
+                <default>false</default>
+                <label>HIMSS Professional Certification Board</label>
+            </value>
+            <value>
+                <fullName>Innovation</fullName>
+                <default>false</default>
+                <label>Innovation</label>
+            </value>
+            <value>
+                <fullName>Interoperability &amp; Health Information Exchange</fullName>
+                <default>false</default>
+                <label>Interoperability &amp; Health Information Exchange</label>
+            </value>
+            <value>
+                <fullName>Long-Term and Post-Acute Care</fullName>
+                <default>false</default>
+                <label>Long-Term and Post-Acute Care</label>
+            </value>
+            <value>
+                <fullName>Nursing Informatics</fullName>
+                <default>false</default>
+                <label>Nursing Informatics</label>
+            </value>
+            <value>
+                <fullName>Physician</fullName>
+                <default>false</default>
+                <label>Physician</label>
+            </value>
+            <value>
+                <fullName>Professional Development</fullName>
+                <default>false</default>
+                <label>Professional Development</label>
+            </value>
+            <value>
+                <fullName>Public Policy</fullName>
+                <default>false</default>
+                <label>Public Policy</label>
+            </value>
+            <value>
+                <fullName>Social Determinants of Health</fullName>
+                <default>false</default>
+                <label>Social Determinants of Health</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

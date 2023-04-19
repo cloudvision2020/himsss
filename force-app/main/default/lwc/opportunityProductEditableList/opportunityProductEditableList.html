@@ -1,0 +1,76 @@
+<template>
+
+    <lightning-card>
+        <template if:false={showList}>
+            No Selected Products Yet
+        </template>
+        <template if:true={showList}>
+            <!--<div class="slds-table--header-fixed_container">-->
+            <div class="slds-scrollable" style="max-height:250px;min-height:200px;">
+                <div class="slds-p-around_none">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="">
+                                <th scope="col" style="max-width:70px; min-width:50px; white-space: inherit">
+                                    <div class="slds-truncate" title='Action'>Action</div>
+                                </th>
+                                <template for:each={coulmnNames} for:item="colmn">
+                                    <th key={colmn} class="slds-size_3-of-10" scope="col"
+                                        style="max-width:170px; min-width:150px; white-space: inherit">
+                                        <div class="slds-truncate " title={colmn.fieldName}>{colmn.fieldLabel}</div>
+                                    </th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={prductRecords} for:item="item" for:index="indexVar">
+                                <tr key={item.prodId} class="slds-hint-parent">
+                                    <td id={indexVar} class="slds-size_3-of-10">
+                                        <template if:true={item.hideDelete}>
+                                            <lightning-button-icon value={indexVar} icon-name="utility:delete"
+                                                class="slds-icon slds-icon_small" size="small" alternative-text="Delete"
+                                                onclick={removeRow} disabled></lightning-button-icon>
+                                        </template>
+                                        <template if:false={item.hideDelete}>
+                                            <lightning-button-icon value={indexVar} icon-name="utility:delete"
+                                                class="slds-icon slds-icon_small" size="small" alternative-text="Delete"
+                                                onclick={removeRow}></lightning-button-icon>
+                                        </template>
+
+                                    </td>
+                                    <template for:each={item.fileDetailWrapper} for:item="row">
+                                        <template if:true={row.isVisible}>
+                                            <td key={item.prodId} class="slds-size_3-of-10" data-label={row.fieldLabel}>
+                                                <template if:true={row.isProdcutName}>
+                                                    <div title={row.title}> {row.fieldValue}</div>
+                                                </template>
+                                                <template if:false={row.isProdcutName}>
+                                                    <template if:false={row.isEditable}>
+                                                        <c-input-fields field={row} prodid={indexVar}
+                                                            recordtypename={recordTypeName}
+                                                            onfieldchange={handleFieldChange} ontypechange={handleSubTypeChange}></c-input-fields>
+                                                    </template>
+                                                    <template if:true={row.isEditable}>
+                                                        <c-input-fields field={row} prodid={indexVar}
+                                                            recordtypename={recordTypeName}
+                                                            onfieldchange={handleFieldChange} ontypechange={handleSubTypeChange}></c-input-fields>
+                                                    </template>
+                                                </template>
+
+                                            </td>
+                                        </template>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--</div>-->
+        </template>
+    </lightning-card>
+    <div if:true={showLoading} class="backgroundInverse">
+        <lightning-spinner alternative-text="Loading..." variant="brand" size="large">
+        </lightning-spinner>
+    </div>
+</template>

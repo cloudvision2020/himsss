@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_date_Required_on_Set_BillingDate</fullName>
+    <active>true</active>
+    <description>Ensures that the Billing Date is populated if the Set Billing Date field is checked</description>
+    <errorConditionFormula>OR(
+ AND( 
+  ISBLANK(Billing_Date__c),
+  Set_Billing_Date__c = true
+ ),
+ AND(
+  Set_Billing_Date__c = false,
+  ISBLANK(Billing_Date__c) &lt;&gt; True
+ )
+)</errorConditionFormula>
+    <errorMessage>If you are setting a Billing date, please ensure that the Set Billing Date is Checked and a Billing Date is provided.</errorMessage>
+</ValidationRule>

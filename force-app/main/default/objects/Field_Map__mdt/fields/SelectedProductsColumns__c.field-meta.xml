@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SelectedProductsColumns__c</fullName>
+    <description>List of columns (fields) to be displayed in &quot;Selected Products&quot; section on Add/Edit Products Page. Enter field API names with semi colon separator.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>List of columns (fields) to be displayed in &quot;Selected Products&quot; section on Add/Edit Products Page. Enter field API names with semi colon separator.</inlineHelpText>
+    <label>SelectedProductsColumns</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

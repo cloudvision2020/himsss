@@ -1,0 +1,28 @@
+<template>
+    <lightning-quick-action-panel header="Audit Subscriptions">    
+      <template if:true={isData}>     
+        <div class="labels">    
+        {label.SubscriptionList} - {subscriptionLst} And {label.AuditSubscriptionList} - {auditSubscriptionLst}
+      </div>    
+      </template>
+    
+      <template if:true={areDetailsVisible}>  
+        <div class="slds-theme_default">    
+        <div class="slds-p-around_medium">    
+            <lightning-progress-bar value={progress} size="large" variant="circular"></lightning-progress-bar>   
+        </div>    
+        <div class="labels">    
+          <div class="slds-text-align--center slds-text-title">    
+            <b>{processStatus}</b>    
+          </div>    
+        </div>    
+    </div>
+    
+    </template>
+      <div slot="footer">    
+        <lightning-button variant="neutral" onclick={handleCancel} label="Close"></lightning-button>    
+        <lightning-button variant="brand" disabled={showButton} label="Process " onclick={handleBatchClass} class="slds-m-left_x-small"></lightning-button>
+          </div>    
+    </lightning-quick-action-panel>
+    
+    </template>

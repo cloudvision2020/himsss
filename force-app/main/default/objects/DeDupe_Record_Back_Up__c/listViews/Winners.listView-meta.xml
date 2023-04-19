@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Winners</fullName>
+    <columns>NAME</columns>
+    <columns>Original_Object__c</columns>
+    <columns>De_Dupe_Key_Description__c</columns>
+    <columns>De_Dupe_Key_Value__c</columns>
+    <columns>Winner_or_Loser__c</columns>
+    <columns>Original_Record_Id__c</columns>
+    <columns>Winner_ID__c</columns>
+    <columns>Re_Parented_Opportunities__c</columns>
+    <columns>Re_Parented_Contacts__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Winner_or_Loser__c</field>
+        <operation>equals</operation>
+        <value>Winner</value>
+    </filters>
+    <label>Winners</label>
+</ListView>

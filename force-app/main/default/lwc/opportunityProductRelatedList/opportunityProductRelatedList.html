@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-text-align_left">
+        <lightning-card variant="Narrow" icon-name="standard:product">
+            <h1 style="font-weight: bold;" slot="title">{productWithCount}</h1>
+            <template for:each={productData} for:item="item">
+                <div class="slds-p-horizontal_small slds-p-top_xx-small" key={item.Id} style="font-weight: bold;">
+                    <a href={item.url}>{item.oliName}</a>
+                </div>
+                <template for:each={item.Details} for:item="fields">
+                    <p class="slds-p-horizontal_small" key={item}>{fields.Lable} : {fields.Value} </p>
+                </template>
+            </template>
+        </lightning-card>
+    </div>
+
+</template>

@@ -1,0 +1,10 @@
+.tablescroll {
+    overflow: auto;
+    overflow-y: hidden;
+    height: 10rem;
+}
+.tableviewinnerdiv{
+    overflow: auto;
+    overflow-y: hidden;
+    height: 10rem;
+}

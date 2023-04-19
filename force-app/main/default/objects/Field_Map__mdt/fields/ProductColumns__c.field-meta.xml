@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProductColumns__c</fullName>
+    <description>List of columns (fields) to be displayed in products related list on opportunity detail page. Enter field API names with comma separator.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>List of columns (fields) to be displayed in products related list on opportunity detail page. Enter field API names with comma separator.</inlineHelpText>
+    <label>ProductColumns</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

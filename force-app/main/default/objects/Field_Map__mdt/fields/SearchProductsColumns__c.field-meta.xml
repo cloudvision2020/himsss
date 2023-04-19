@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SearchProductsColumns__c</fullName>
+    <description>List of columns (fields) to be displayed in &quot;Search &amp; Add Products&quot; section on Add/Edit Products Page. Enter field API names with comma separator.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>List of columns (fields) to be displayed in &quot;Search &amp; Add Products&quot; section on Add/Edit Products Page. Enter field API names with comma separator.</inlineHelpText>
+    <label>SearchProductsColumns</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

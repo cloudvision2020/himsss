@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Activity_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Activity Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CE Hours</fullName>
+                <default>false</default>
+                <label>CE Hours</label>
+            </value>
+            <value>
+                <fullName>Academic Credits</fullName>
+                <default>false</default>
+                <label>Academic Credits</label>
+            </value>
+            <value>
+                <fullName>Presentation</fullName>
+                <default>false</default>
+                <label>Presentation</label>
+            </value>
+            <value>
+                <fullName>Publications</fullName>
+                <default>false</default>
+                <label>Publications</label>
+            </value>
+            <value>
+                <fullName>Professional Service</fullName>
+                <default>false</default>
+                <label>Professional Service</label>
+            </value>
+            <value>
+                <fullName>Item Writing</fullName>
+                <default>false</default>
+                <label>Item Writing</label>
+            </value>
+            <value>
+                <fullName>Ethics</fullName>
+                <default>false</default>
+                <label>Ethics</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

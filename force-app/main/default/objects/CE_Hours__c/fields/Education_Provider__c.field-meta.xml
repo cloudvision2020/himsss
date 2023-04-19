@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Education_Provider__c</fullName>
+    <externalId>false</externalId>
+    <label>Education Provider</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>HIMSS</fullName>
+                <default>false</default>
+                <label>HIMSS</label>
+            </value>
+            <value>
+                <fullName>NON-HIMSS</fullName>
+                <default>false</default>
+                <label>NON-HIMSS</label>
+            </value>
+            <value>
+                <fullName>HIMSS Chapter</fullName>
+                <default>false</default>
+                <label>HIMSS Chapter</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Once_Billing_Date_set_lock_editing</fullName>
+    <active>true</active>
+    <description>Ensures that once a Billing Date is set, you can no longer uncheck the record and remove the billing date</description>
+    <errorConditionFormula>AND(
+  ISCHANGED(Set_Billing_Date__c),
+  Set_Billing_Date__c = False,
+  $Profile.Name &lt;&gt; &quot;System Administrator&quot;
+)</errorConditionFormula>
+    <errorMessage>You cannot remove a billing date once set</errorMessage>
+</ValidationRule>

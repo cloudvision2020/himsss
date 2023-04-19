@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>De_Dupe_Key_Value__c</fullName>
+    <description>Value of the de dupe key from the original record (e.g &quot;JohnSmithJsmith@gmail.com&quot; would be derived from a De dupe rule of FirstName + LastName + Email)</description>
+    <externalId>false</externalId>
+    <label>De Dupe Key Value</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuantityWholeNumber__c</fullName>
+    <description>To Round up the quantity to nearest integer</description>
+    <externalId>false</externalId>
+    <formula>IF( 
+AND(Contract_Line_Item__r.Quantity__c = 1, Contract_Line_Item__r.Rate_Type__c != &apos;CPM&apos;), 
+    1,
+    ROUND(Quantity__c,0)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Round the quantity to nearest integer</inlineHelpText>
+    <label>Quantity*</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

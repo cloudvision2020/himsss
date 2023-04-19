@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Quote_Needed__c</fullName>
+    <externalId>false</externalId>
+    <label>Product Quote Needed</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ABM Journey</fullName>
+                <default>false</default>
+                <label>ABM Journey</label>
+            </value>
+            <value>
+                <fullName>ABM Momentum</fullName>
+                <default>false</default>
+                <label>ABM Momentum</label>
+            </value>
+            <value>
+                <fullName>Content Creation</fullName>
+                <default>false</default>
+                <label>Content Creation</label>
+            </value>
+            <value>
+                <fullName>Lead Generation</fullName>
+                <default>false</default>
+                <label>Lead Generation</label>
+            </value>
+            <value>
+                <fullName>Market Insights</fullName>
+                <default>false</default>
+                <label>Market Insights</label>
+            </value>
+            <value>
+                <fullName>Smart Mail</fullName>
+                <default>false</default>
+                <label>Smart Mail</label>
+            </value>
+            <value>
+                <fullName>Webinar</fullName>
+                <default>false</default>
+                <label>Webinar</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>8</visibleLines>
+</CustomField>

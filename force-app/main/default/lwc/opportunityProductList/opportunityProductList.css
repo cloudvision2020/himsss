@@ -1,0 +1,10 @@
+.slds-button--icon-container{
+  fill:red !important;
+}
+
+.fillcolor {
+background-color: red !important;
+}
+.slds-button__icon svg{
+fill:red !important;
+}

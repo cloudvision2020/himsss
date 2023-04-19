@@ -1,0 +1,66 @@
+<template>
+    <div class="slds-grid">
+        <div class="slds-col">
+            <template if:true={field.isRequired}>
+                <span class="red-star" style="color: red;">★</span>
+            </template>
+        </div>
+        <div class="slds-col">
+            <template if:true={isLightningInput}>
+                <template if:true={field.isEditable}>
+                    <lightning-input name={field.fieldName} title={field.fieldLabel} label={field.fieldLabel}
+                        type={fieldType} value={field.fieldValue} placeholder={placeholderText}
+                        required={field.isRequired} id={prodid} variant="label-hidden" onblur={handleInputChange}>
+                    </lightning-input>
+                </template>
+                <template if:false={field.isEditable}>
+                    <lightning-input name={field.fieldName} title={field.fieldLabel} label={field.fieldLabel}
+                        type={fieldType} value={field.fieldValue} placeholder={placeholderText}
+                        required={field.isRequired} id={prodid} variant="label-hidden" onblur={handleInputChange}
+                        disabled></lightning-input>
+                </template>
+            </template>
+            <template if:true={isCurrency}>
+                <template if:true={field.isEditable}>
+                    <lightning-input name={field.fieldName} title={field.fieldLabel} label={field.fieldLabel}
+                        type={fieldType} value={field.fieldValue} placeholder={placeholderText} step=".01"
+                        required={field.isRequired} id={prodid} variant="label-hidden" onblur={handleInputChange}>
+                    </lightning-input>
+                </template>
+                <template if:false={field.isEditable}>
+                    <lightning-input name={field.fieldName} title={field.fieldLabel} label={field.fieldLabel}
+                        type={fieldType} value={field.fieldValue} placeholder={placeholderText}
+                        required={field.isRequired} id={prodid} variant="label-hidden" onblur={handleInputChange}
+                        disabled step=".01"></lightning-input>
+                </template>
+            </template>
+            <template if:true={isPicklist}>
+                <template if:true={picklistHasData}>
+                   
+                    <template if:false={field.isEditable}>
+                        <lightning-combobox title={field.fieldLabel} name={field.fieldName} label={field.fieldLabel}
+                            value={field.fieldValue} options={options} onchange={handlePicklistChange}
+                            variant="label-hidden" required={field.isRequired} id={prodid} disabled>
+                        </lightning-combobox>
+                    </template>
+
+
+                    <template if:true={field.isEditable}>
+                        <lightning-combobox title={field.fieldLabel} name={field.fieldName} label={field.fieldLabel}
+                            value={field.fieldValue} options={options} onchange={handlePicklistChange}
+                            variant="label-hidden" required={field.isRequired} id={prodid}>
+                        </lightning-combobox>
+                    </template>
+
+
+                </template>
+            </template>
+            <template if:true={isCheckbox}>
+                <lightning-input name={field.fieldName} title={field.fieldLabel} label={field.label} type={fieldType}
+                    value={field.fieldValue} variant="label-inline" onchange={handleInputChange} checked={field.fieldValue}
+                    required={field.isRequired} id={prodid}>
+                </lightning-input>
+            </template>
+        </div>
+    </div>
+</template>

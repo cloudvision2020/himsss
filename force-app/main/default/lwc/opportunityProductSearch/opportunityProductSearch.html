@@ -1,0 +1,89 @@
+<template>
+    <lightning-layout multiple-rows="true" vertical-align="end">
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2" class="slds-m-left_medium">
+            <lightning-combobox name="Product Region"
+                                 value={productRegionValue}
+                                 placeholder="-Region-"
+                                 options={regionFieldData}
+                                 onchange={handleRegionChange} >
+            </lightning-combobox>
+         </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2" class="slds-m-left_medium">
+           <lightning-combobox name="Product Family"
+                                value={productFamilyValue}
+                                placeholder="-Product Family-"
+                                options={familyFieldData}
+                                onchange={handleFamilyFieldChange} >
+           </lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2" class="slds-m-left_medium">
+            <template if:true={showTypeField}>
+                <lightning-combobox name="Type"
+                    value={TypeValue}
+                    placeholder="-Type-"
+                    options={typeFieldOption}
+                    onchange={handleTypeFieldChange}>
+                </lightning-combobox>
+            </template>
+            <template if:false={showTypeField}>
+                <lightning-combobox name="Type"
+                    value={TypeValue}
+                    placeholder="-Type-"
+                    options={typeFieldOption}
+                    onchange={handleTypeFieldChange} 
+                    disabled>
+                </lightning-combobox>
+            </template>
+           
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2" class="slds-m-left_medium">
+            <template if:true={showSubtypeField}>
+                <lightning-combobox name="Sub-Type"
+                    value={SubtypeValue}
+                    placeholder="-Sub Type-"
+                    options={subtypeFieldOption}
+                    onchange={handleSubTypeFieldChange}>
+                </lightning-combobox>
+            </template>
+            <template if:false={showSubtypeField}>
+                <lightning-combobox name="Sub-Type"
+                    value={SubtypeValue}
+                    placeholder="-Sub Type-"
+                    options={subtypeFieldOption}
+                    onchange={handleSubTypeFieldChange} 
+                    disabled>
+                </lightning-combobox>
+            </template>  
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2" class="slds-m-left_medium">
+           <lightning-input type="text"
+           label=''
+           value={productNameValue}
+           placeholder="Search By Product Name"
+           onchange={productNameChange}
+           ></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="1" class="slds-m-left_medium slds-m-top_small">
+            <div class ="slds-align_absolute-center">
+                <lightning-button  label="Clear" title="Clear Search" onclick={handleClear} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+        
+    <template if:true={rowsHasData}>
+        <div class="slds-p-top_large">
+            <lightning-datatable
+            key-field="id"
+            data={searchProductsList}
+            columns={searchProductsCoulmns}
+            hide-checkbox-column
+            enable-infinite-loading
+            resize-column-disabled
+            column-widths-mode="fixed"
+            wrap-text-max-lines=3
+            min-column-width ='200'
+            onrowaction={handelAddClick}>
+            </lightning-datatable>
+        </div>
+    </template>
+</template>

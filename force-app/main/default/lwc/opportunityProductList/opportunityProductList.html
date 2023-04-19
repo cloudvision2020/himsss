@@ -1,0 +1,25 @@
+<template>
+            <div style="background: white;" if:true={isData} class="slds-scrollable">
+                <lightning-datatable
+                        key-field="id"
+                        data={productdata}
+                        columns={columns}
+                        column-widths-mode="fixed"
+                        resize-column-disabled
+                        onrowaction={handleRowAction}
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={handleSortdata}
+                        min-column-width = '80'
+                        hide-checkbox-column>
+                       
+                </lightning-datatable>
+            </div>
+            <div if:true={showLoading} class="backgroundInverse">
+                <lightning-spinner alternative-text="Loading..." variant="brand" size="large">
+            </lightning-spinner>
+            </div>
+    
+            
+            
+</template>

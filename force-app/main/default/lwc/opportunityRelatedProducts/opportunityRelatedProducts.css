@@ -1,0 +1,28 @@
+.slds-card {
+    background: whitesmoke;
+}
+
+.slds-card__body {
+    background: white;
+}
+.slds-text-heading_small {
+    font-size:1rem;
+    line-height: 1.25;
+    font-weight: bold;
+}
+
+.slds-modal__container {
+    margin: 0 auto;
+    max-width: 83rem !important;
+    width: 100% !important;
+    max-width: 100%;
+   
+    
+}
+
+.slds-modal__content {
+    overflow: hidden;
+    overflow-y: auto;
+    min-height: 500px !important;
+    
+}

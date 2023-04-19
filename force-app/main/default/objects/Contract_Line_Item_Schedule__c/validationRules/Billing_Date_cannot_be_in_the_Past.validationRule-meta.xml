@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_Date_cannot_be_in_the_Past</fullName>
+    <active>true</active>
+    <errorConditionFormula>Billing_Date__c &lt; TODAY()</errorConditionFormula>
+    <errorDisplayField>Billing_Date__c</errorDisplayField>
+    <errorMessage>The Billing Date cannot be in the Past</errorMessage>
+</ValidationRule>

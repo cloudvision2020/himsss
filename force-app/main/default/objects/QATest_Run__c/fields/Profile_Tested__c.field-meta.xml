@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Profile_Tested__c</fullName>
+    <externalId>false</externalId>
+    <label>Profile Tested</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NA Standard</fullName>
+                <default>false</default>
+                <label>NA Standard</label>
+            </value>
+            <value>
+                <fullName>NA Elevated</fullName>
+                <default>false</default>
+                <label>NA Elevated</label>
+            </value>
+            <value>
+                <fullName>Intl Standard</fullName>
+                <default>false</default>
+                <label>Intl Standard</label>
+            </value>
+            <value>
+                <fullName>Intl Elevated</fullName>
+                <default>false</default>
+                <label>Intl Elevated</label>
+            </value>
+            <value>
+                <fullName>Media Standard</fullName>
+                <default>false</default>
+                <label>Media Standard</label>
+            </value>
+            <value>
+                <fullName>Media Elevated</fullName>
+                <default>false</default>
+                <label>Media Elevated</label>
+            </value>
+            <value>
+                <fullName>Analytics Marketing</fullName>
+                <default>false</default>
+                <label>Analytics Marketing</label>
+            </value>
+            <value>
+                <fullName>Analytics Standard</fullName>
+                <default>false</default>
+                <label>Analytics Standard</label>
+            </value>
+            <value>
+                <fullName>Analytics Elevated</fullName>
+                <default>false</default>
+                <label>Analytics Elevated</label>
+            </value>
+            <value>
+                <fullName>HGP Standard</fullName>
+                <default>false</default>
+                <label>HGP Standard</label>
+            </value>
+            <value>
+                <fullName>HGP Elevated</fullName>
+                <default>false</default>
+                <label>HGP Elevated</label>
+            </value>
+            <value>
+                <fullName>PCHA Standard</fullName>
+                <default>false</default>
+                <label>PCHA Standard</label>
+            </value>
+            <value>
+                <fullName>PCHA Elevated</fullName>
+                <default>false</default>
+                <label>PCHA Elevated</label>
+            </value>
+            <value>
+                <fullName>Healthbox Standard</fullName>
+                <default>false</default>
+                <label>Healthbox Standard</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
