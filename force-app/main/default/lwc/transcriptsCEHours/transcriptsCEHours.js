@@ -69,6 +69,20 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
     @track confirmButtonVariant = 'brand';
     @api subscriptionId;
     @api soEncryptId;
+
+    activeSections = ['A', 'C'];
+    activeSectionsMessage = '';
+
+    handleSectionToggle(event) {
+        const openSections = event.detail.openSections;
+
+        if (openSections.length === 0) {
+            this.activeSectionsMessage = 'All sections are closed';
+        } else {
+            this.activeSectionsMessage =
+                'Open sections: ' + openSections.join(', ');
+        }
+    }
     
     @wire(fetchCEHoursActive,{ isActive: true }) wiredCallbackResult1(result){
         this.wiredData = result;

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 04-18-2023
+ * @last modified on  : 04-19-2023
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public class TranscriptCEHoursController {
@@ -120,11 +120,13 @@ public class TranscriptCEHoursController {
 		List<OrderApi__Subscription__c> listSub = [SELECT Id,
                                                         OrderApi__Contact__c,
                                                         OrderApi__Item__c,
+                                                        OrderApi__Item__r.Recertification_Fee__c,
+                                                        Recertification_Fee_Item__c,
                                                         OrderApi__Subscription_Plan__c,
                                                         OrderApi__Account__c,(Select Id, Renewal_Sales_Order__c, Renewal_Sales_Order__r.OrderApi__Encrypted_Id__c from OrderApi__Renewals__r ORDER BY CreatedDate DESC limit 1)
           												FROM OrderApi__Subscription__c
           												WHERE Id=:subId];
-    
+        system.debug('>>. > > '+ listSub[0].OrderApi__Item__r.Recertification_Fee__c);
         for (OrderApi__Subscription__c sub : listSub) {
         	OrderApi__Sales_Order__c salesOrder = createSalesOrder(sub.OrderApi__Account__c, sub);
           	contactToSOMap.put(sub.OrderApi__Contact__c, salesOrder);
@@ -148,6 +150,14 @@ public class TranscriptCEHoursController {
               	Id soid = contactToSOMapStateful.get(sub.OrderApi__Contact__c).Id;
               	updateOrders.add(new OrderApi__Sales_Order__c(Id = soid,OrderApi__is_Closed__c = true,OrderApi__Status__c = 'Closed'));
               	lines.add(createOrderLines(sub.OrderApi__Account__c , soid, sub));
+                if(sub.Recertification_Fee_Item__c != null){
+                    FDService.SalesOrderLine line = FDService.SalesOrderLine.getInstance();
+                    line.salesOrder = soid;
+                    line.item = sub.Recertification_Fee_Item__c;
+                    line.isRenewal = false;
+                    line.entity = 'Contact';
+                    lines.add(line);
+                }
           	}	
         }
         if(!lines.isEmpty()) {
@@ -159,6 +169,7 @@ public class TranscriptCEHoursController {
             OrderApi__Renewal__c term = new OrderApi__Renewal__c();
             term.Id = termId;
             term.Renewal_Sales_Order__c = updateOrders[0].Id;
+            term.Is_Attested__c = true;
             
             Framework.Dispatcher.disableTriggerInContext.put('OrderApi__Renewal__c', true);
             update term;
