@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 04-12-2023
+ * @last modified on  : 05-04-2023
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public class CECreditHoursTriggerHandler implements TriggerHandlerInterface{
@@ -66,9 +66,9 @@ public class CECreditHoursTriggerHandler implements TriggerHandlerInterface{
 
                 for(CE_Hours__c cEHours : term.CE_Hours__r){
                     if(cEHours.Education_Provider__c == 'NON-HIMSS'){
-                        approvedHours = approvedHours + cEHours.Number_Of_Credits__c;
-                    }else{
                         nonApprovedHours = nonApprovedHours + cEHours.Number_Of_Credits__c;
+                    }else{
+                        approvedHours = approvedHours + cEHours.Number_Of_Credits__c;
                     }
                     if(cEHours.Activity_Type__c == 'Ethics'){
                         noEthics = noEthics + cEHours.Number_Of_Credits__c;

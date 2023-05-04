@@ -2,10 +2,14 @@ import { LightningElement,wire,track,api } from 'lwc';
 import fetchCEHoursActive from '@salesforce/apex/TranscriptCEHoursController.fetchCEHoursActive';  
 import fetchCEHoursInActive from '@salesforce/apex/TranscriptCEHoursController.fetchCEHoursInActive';  
 import deleteSelectedRecord from '@salesforce/apex/TranscriptCEHoursController.deleteSelectedRecord';
+import createCertificate from '@salesforce/apex/TranscriptCEHoursController.createCertificate';
+import viewCertificate from '@salesforce/apex/TranscriptCEHoursController.viewCertificate';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 import submitText from '@salesforce/label/c.HIMSS_Submit';
 import isrenewal from '@salesforce/label/c.HIMSS_Renewal';
 import isrenewalSuccess from '@salesforce/label/c.HIMSS_Success';
+import isCerttificateText	 from '@salesforce/label/c.isCerttificateText';
+import isCerttificate from '@salesforce/label/c.isCerttificate';
 import processSubscription from '@salesforce/apex/TranscriptCEHoursController.processSubscription';
 import { NavigationMixin } from "lightning/navigation";
 
@@ -42,7 +46,9 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
     label = {
         submitText,
         isrenewal,
-        isrenewalSuccess
+        isrenewalSuccess,
+        isCerttificateText,	
+        isCerttificate
     };
     
     columns = COLUMNS; 
@@ -158,7 +164,63 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
         this.isModalOpen2 = false;
         window.open('/Himss/s/store#/store/checkout/'+ this.soEncryptId, "_self");
     }
-        
+
+    @track isCreateCertificate = false;
+    
+    createCertificate(){
+        this.isLoading = true;
+        createCertificate({
+            subId: this.subscriptionId
+        })  
+        .then(result => {
+            if(result != null){
+                const evt = new ShowToastEvent({
+                    title: 'Success Message',
+                    message: isCerttificate,
+                    variant: 'success',
+                    mode:'dismissible'
+                });
+                this.dispatchEvent(evt);
+                setTimeout(()=>{
+                    this.isLoading = false;
+                    this.isCreateCertificate = true;
+                }, 8000);
+                
+                
+            }else if(result == 'null'){
+                const evt = new ShowToastEvent({
+                    title: 'Success Message',
+                    message: 'Something went wrong.',
+                    variant: 'error',
+                    mode:'dismissible'
+                });
+                this.dispatchEvent(evt);
+            }           
+        })
+        .catch(error => {
+            console.log('Error processing subscription:', error);
+        });
+    }
+
+    viewCertificate(){
+        viewCertificate({
+            subId: this.subscriptionId
+        })  
+        .then(result => {
+            this.isCreateCertificate = false;
+            if(result != null){
+               window.open('/Himss/servlet/servlet.FileDownload?file='+ result);
+            }
+        })
+        .catch(error => {
+            console.log('Error processing subscription:', error);
+        });
+    }
+
+    closeCertificate(){
+        this.isCreateCertificate = false;
+    }
+    
     openPopup1(event){
         this.ceHourSelected = null;
         this.termId = event.target.dataset.id;

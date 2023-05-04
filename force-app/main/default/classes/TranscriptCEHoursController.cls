@@ -202,5 +202,35 @@ public class TranscriptCEHoursController {
         line.entity = 'Contact';
         return line;
     }
+
+    @AuraEnabled
+    public static string createCertificate(String subId) {
+        
+        List<OrderApi__Subscription__c> lstSub = [Select Id, Certificate__c from OrderApi__Subscription__c where Id=:subId];
+        
+        if(lstSub.size() > 0 && lstSub[0].Certificate__c != null){
+            SDOC__SDJob__c job = new SDOC__SDJob__c();
+            job.SDOC__Start__c = true;
+            job.SDOC__Oid__c = subId;
+            job.SDOC__ObjApiName__c = 'OrderApi__Subscription__c';
+        	job.SDOC__Doclist__c = lstSub[0].Certificate__c;
+            insert job;
+    
+            return job.Id;
+        }
+        return null;
+        
+    }
+
+    @AuraEnabled
+    public static string viewCertificate(String subId) {
+        List<Attachment> lstAttach = [Select Id, ParentId, CreatedById from Attachment where ParentId =:subId and CreatedById =:UserInfo.getUserId() ORDER BY CreatedDate DESC limit 1 ];
+
+        if(lstAttach.size() > 0){
+            return lstAttach[0].Id;
+        }
+
+        return null;
+    }
   
 }
