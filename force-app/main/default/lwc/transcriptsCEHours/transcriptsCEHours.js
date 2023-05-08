@@ -118,13 +118,13 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
     }
     
     @track isModalOpen2 = false;
-    closeSubmit() {
+    closeSubmit(event) {
         // to open modal set isModalOpen tarck value as true
-        
+        event.preventDefault();
         this.isModalOpen = false;
         this.isLoading = true;
         processSubscription({
-            subId: this.subscriptionId
+            subId: event.target.dataset.id
         })  
         .then(result => {
             this.isLoading = false;
@@ -167,10 +167,12 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
 
     @track isCreateCertificate = false;
     
-    createCertificate(){
+    createCertificate(event){
+        event.preventDefault();
         this.isLoading = true;
+        this.subscriptionId = event.target.dataset.id;
         createCertificate({
-            subId: this.subscriptionId
+            subId: event.target.dataset.id
         })  
         .then(result => {
             if(result != null){
@@ -184,7 +186,7 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
                 setTimeout(()=>{
                     this.isLoading = false;
                     this.isCreateCertificate = true;
-                }, 8000);
+                }, 12000);
                 
                 
             }else if(result == 'null'){
@@ -202,7 +204,8 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
         });
     }
 
-    viewCertificate(){
+    viewCertificate(event){
+        event.preventDefault();
         viewCertificate({
             subId: this.subscriptionId
         })  

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 04-19-2023
+ * @last modified on  : 05-05-2023
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public class TranscriptCEHoursController {
@@ -22,7 +22,7 @@ public class TranscriptCEHoursController {
         Map<Id,OrderApi__Subscription__c> subscriptions;
         
         if(isActive){
-            subscriptions = new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c,
+            subscriptions = new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,
                                                                  Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c,
                                         (Select Id,Name, OrderApi__Subscription__c 
                                         FROM OrderApi__Renewals__r Where OrderApi__Is_Active__c=true
@@ -33,7 +33,7 @@ public class TranscriptCEHoursController {
                                         AND Is_Certificate__c=TRUE]); 
         }
         else{
-            subscriptions =  new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c,
+            subscriptions =  new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,
                                                                    Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c,
                                         (Select Id,Name, OrderApi__Subscription__c 
                                         FROM OrderApi__Renewals__r order by createdDate DESC
