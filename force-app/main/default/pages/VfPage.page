@@ -1,0 +1,15 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" cache="true"
+           standardController="OrderApi__Subscription__c">
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script>
+        $Lightning.use("LTE:SubscriptionApp", function() {
+            $Lightning.createComponent("LTE:renewSubscription", {
+                recordId : "{!JSENCODE($CurrentPage.parameters.id)}",
+                theme : "{!JSENCODE($User.UITheme)}"
+            }, "lightning", function(cmp, status, error) {
+                console.log(error);
+            });
+        });
+    </script>
+</apex:page>

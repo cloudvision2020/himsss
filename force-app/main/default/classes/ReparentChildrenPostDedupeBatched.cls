@@ -16,9 +16,9 @@ global class ReparentChildrenPostDedupeBatched implements Database.Batchable<sOb
             loserAccountOriginalIdToWinnerId.put(loserAccount.Original_Record_Id__c, loserAccount.Winner_ID__c);
             loserAccountOriginalIds.add(loserAccount.Original_Record_Id__c);
         }
-        ReparentChildrenPostDedupe.addReparentedOppsandContactsToBackup(loserAccountOriginalIds,allLoserAccountBackupRecords);
-        ReparentChildrenPostDedupe.reparentOpportunities(allLoserAccountBackupRecords,loserAccountOriginalIdToWinnerId,loserAccountOriginalIds);
-        ReparentChildrenPostDedupe.reparentContacts(allLoserAccountBackupRecords,loserAccountOriginalIdToWinnerId,loserAccountOriginalIds);
+        //ReparentChildrenPostDedupe.addReparentedOppsandContactsToBackup(loserAccountOriginalIds,allLoserAccountBackupRecords);
+        //ReparentChildrenPostDedupe.reparentOpportunities(allLoserAccountBackupRecords,loserAccountOriginalIdToWinnerId,loserAccountOriginalIds);
+        //ReparentChildrenPostDedupe.reparentContacts(allLoserAccountBackupRecords,loserAccountOriginalIdToWinnerId,loserAccountOriginalIds);
         ReparentChildrenPostDedupe.reparentContracts(allLoserAccountBackupRecords,loserAccountOriginalIdToWinnerId,loserAccountOriginalIds);
     }
     

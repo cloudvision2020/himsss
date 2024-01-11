@@ -1,0 +1,474 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 05-12-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+	<div class="spinner">
+		<template if:true={isLoading}>
+			<lightning-spinner alternative-text="Loading" variant="brand" size="large">
+			</lightning-spinner>
+		</template>
+	</div>
+	
+	<div class="slds-m-around_medium ">
+		<lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle}
+			active-section-name={activeSections}>
+			<lightning-card>
+				<lightning-accordion-section name="A" label={activeCertifications}>
+					
+					<div class="slds-p-horizontal_small">
+						<template if:true={ceHoursActive}>
+							<template for:each={ceHoursActive} for:item="sub">
+								<div style="border: 1px solid #d2d3d5;" key={sub.subscription.Id} class="slds-m-bottom_large ">
+									<lightning-card icon-name="custom:custom11" key={sub.subscription.Id} class="slds-p-bottom_medium">
+										
+										<div class="slds-p-horizontal_small slds-grid slds-grid_vertical-align-center">
+											<div class="slds-grow"></div>
+										<div>
+											<template if:true={sub.subscription.Is_Submit__c}>
+											<lightning-button data-id={sub.subscription.Id} icon-name="utility:save"
+												variant="success" label="Submit" slot="actions" onclick={openModal}>
+											</lightning-button>
+											<template if:true={isModalOpen}>
+												<!-- Modal/Popup Box LWC starts here -->
+												<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+													aria-modal="true" aria-describedby="modal-content-id-1"
+													class="slds-modal slds-fade-in-open">
+													<div class="slds-modal__container" style="max-width: 29rem;">
+														<!-- Modal/Popup Box LWC header here -->
+														<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={No}>
+                                                                <lightning-icon icon-name="utility:close"
+                                                                    alternative-text="close"
+                                                                    variant="inverse"
+                                                                    size="small" ></lightning-icon>
+                                                                <span class="slds-assistive-text">Close</span>
+                                                            </button>
+														<!-- Modal/Popup Box LWC body starts here 
+                                                        <template if:true={sub.subscription.Is_Renewal__c}>-->
+														<div class="slds-modal__content slds-p-around_medium slds-text-heading_small"
+															style="text-align: justify;
+                                                            font-family: auto;" id="modal-content-id-1">
+															{label.submitText}
+														</div>
+														<!-- </template>
+                                                            Modal/Popup Box LWC footer starts here -->
+														<footer class="slds-modal__footer">
+
+															<button data-id={sub.subscription.Id} class="slds-button slds-button_brand" onclick={closeSubmit} title="OK">Yes</button>
+															<button class="slds-button slds-button_neutral" onclick={cancel} title="Cancel">No</button>
+														</footer>
+													</div>
+												</section>
+												<div class="slds-backdrop slds-backdrop_open"></div>
+											</template>
+											<template if:true={isModalOpen2}>
+												<!-- Modal/Popup Box LWC starts here -->
+												<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+													aria-modal="true" aria-describedby="modal-content-id-1"
+													class="slds-modal slds-fade-in-open">
+													<div class="slds-modal__container" style="max-width: 29rem;">
+														<!-- Modal/Popup Box LWC header here -->
+														<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={No2}>
+                                                            <lightning-icon icon-name="utility:close"
+                                                                alternative-text="close"
+                                                                variant="inverse"
+                                                                size="small" ></lightning-icon>
+                                                            <span class="slds-assistive-text">Close</span>
+                                                        </button>
+														<!-- Modal/Popup Box LWC body starts here 
+                                                        <template if:true={sub.subscription.Is_Renewal__c}>-->
+														<div class="slds-modal__content slds-p-around_medium slds-text-heading_small"
+															style="text-align: center;
+                                                            font-family: auto;" id="modal-content-id-2">
+															{label.isrenewal}
+														</div>
+														<!-- </template>
+                                                            Modal/Popup Box LWC footer starts here -->
+														<footer class="slds-modal__footer">
+
+															<button data-id={sub.subscription.Id} class="slds-button slds-button_brand" onclick={closeRenewal} title="OK">Pay Now</button>
+															<button class="slds-button slds-button_neutral" onclick={cancelRenewal} title="Cancel">Cancel</button>
+														</footer>
+													</div>
+												</section>
+												<div class="slds-backdrop slds-backdrop_open"></div>
+											</template>
+										</template> &nbsp;&nbsp;
+											<lightning-button data-id={sub.subscription.Id} class="slds-p-right_medium"
+											variant="success" label="Generate Certificate" slot="actions"
+											onclick={createCertificate}></lightning-button></div></div> &nbsp;&nbsp;
+											<template if:true={sub.subscription.FON_Override_Submit_Logic__c}>
+												<template if:true={sub.subscription.Is_Submit__c}>
+												<div class="slds-align_absolute-center slds-p-around_small slds-text-heading_small slds-truncate" style="color:green;">
+													<h3>{eligibileDate} <lightning-formatted-date-time value={sub.subscription.Recert_Eligible_Date__c}></lightning-formatted-date-time> through &nbsp;
+													<lightning-formatted-date-time value={sub.subscription.OrderApi__Grace_Period_End_Date__c}></lightning-formatted-date-time>.  </h3>
+												</div>
+												</template>
+												
+												<!--
+												<div class="slds-align_absolute-center slds-p-around_small slds-text-heading_small slds-truncate"
+													style="color:green;">
+													
+													<h3>{eligibileDate} </h3>
+												</div>
+												-->
+											</template>
+
+										<!--<template if:false={sub.subscription.FON_Override_Submit_Logic__c}>
+											<template if:false={sub.subscription.Is_Submit__c}>-->
+											<template if:true={sub.subscription.Is_CE_Hours__c}>
+											<div class="slds-align_absolute-center slds-p-around_small slds-text-heading_small " style="color:green;">
+												<h3>{label.Certification_Notify} <lightning-formatted-date-time value={sub.subscription.Recert_Eligible_Date__c}></lightning-formatted-date-time> through &nbsp;
+													<lightning-formatted-date-time value={sub.subscription.OrderApi__Grace_Period_End_Date__c}></lightning-formatted-date-time>. </h3>
+											</div>
+											<!--</template>
+											</template>-->
+										</template>
+										<template if:true={isCreateCertificate}>
+											<!-- Modal/Popup Box LWC starts here -->
+											<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+												aria-modal="true" aria-describedby="modal-content-id-1"
+												class="slds-modal slds-fade-in-open">
+												<div class="slds-modal__container" style="max-width: 29rem;">
+													<!-- Modal/Popup Box LWC header here -->
+													<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCertificate}>
+                                                        <lightning-icon icon-name="utility:close"
+                                                            alternative-text="close"
+                                                            variant="inverse"
+                                                            size="small" ></lightning-icon>
+                                                        <span class="slds-assistive-text">Close</span>
+                                                    </button>
+													<!-- Modal/Popup Box LWC body starts here -->
+													<template if:true={isCreateCertificate}>
+														<div class="slds-modal__content slds-p-around_medium slds-text-heading_small"
+															style="text-align: center;
+                                                        font-family: auto;" id="modal-content-id-3">
+															{label.isCerttificateText}
+														</div>
+														<div class="slds-modal__content slds-p-around_medium slds-text-heading_small"
+															style="text-align: center;" id="modal-content-id-4">
+															<button data-id={sub.subscription.Id} style="width: fit-content;" class="slds-button slds-button_brand" onclick={viewCertificate} title="View Certificate">Download Certificate</button>
+														</div>
+													</template>
+												</div>
+											</section>
+											<div class="slds-backdrop slds-backdrop_open"></div>
+										</template>
+										
+
+										<h3 slot="title" class="slds-truncate custom-truncate">
+											<b> Certification: {sub.subscription.FON_Certification_Item__c} Current Certification Period:</b>
+											&nbsp;<b class="slds-text-body_regular"> (<lightning-formatted-date-time value={sub.subscription.OrderApi__Term_Start_Date__c}></lightning-formatted-date-time> - <lightning-formatted-date-time value={sub.subscription.OrderApi__Term_End_Date__c}></lightning-formatted-date-time>)</b>
+											&nbsp; {label.HIMSS_Certification_Period}
+										</h3>
+											
+											<div class="slds-p-horizontal_small">
+												<div class="slds-align_absolute-center slds-p-around_small slds-text-heading_small slds-truncate">
+													<h2>Recertification CE Hours </h2>
+												</div>
+											</div>
+											<div class="slds-p-horizontal_small">
+												<div class="slds-align_absolute-center">
+												<table
+													class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+													style="width:40%;border:1px solid #c4bfbf">
+													<thead>
+														<tr class="slds-line-height_reset">
+															<th class="" scope="col" style="text-align:center;">
+																<div class="slds-truncate">HIMSS</div>
+															</th>
+															<th class="" scope="col" style="text-align:center;">
+																<div class="slds-truncate">Others</div>
+															</th>
+															<th class="" scope="col" style="text-align:center;">
+																<div class="slds-truncate">Total</div>
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr class="slds-hint-parent">
+															<td data-label="Confidence" style="text-align:center;">
+																<div class="slds-truncate">
+																	{sub.subscription.Active_Term_Approved_HIMSS_CE_Hours__c}
+																</div>
+															</td>
+															<td data-label="Amount" style="text-align:center;">
+																<div class="slds-truncate">
+																	{sub.subscription.Active_Term_Non_Approved_CE_Hours__c}
+																</div>
+															</td>
+															<td data-label="Contact" style="text-align:center;">
+																<div class="slds-truncate">
+																	<a href="#"
+																		tabindex="-1">{sub.subscription.Active_Term_CE_Hours__c}</a>
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<!--<template if:true={sub.subscription.FON_Override_Submit_Logic__c}>
+                                                <div class="slds-align_absolute-center slds-p-around_small slds-text-heading_small slds-truncate" style="color:green;">
+                                                    <h3>{label.Certification_Eligible} </h3>
+                                                </div>
+                                            </template>-->
+
+											<lightning-card  icon-name="custom:custom63">
+												
+												<h3 slot="title">
+													<b>CE Hours: </b>
+													
+													
+												</h3>
+												<lightning-button data-id={sub.termId} class={sub.termId}
+													icon-name="utility:add" variant="brand" label="Add CE Hours"
+													slot="actions" onclick={openPopup1}></lightning-button>
+												<div class="slds-m-around_medium">
+													<template if:true={sub.ceHours}>
+														<lightning-datatable key-field="Id" data={sub.ceHours}
+															columns={columns} hide-checkbox-column="true"
+															show-row-number-column="true" onrowaction={handleRowAction}
+															max-column-width="700px">
+														</lightning-datatable>
+
+													</template>
+													<template if:true={error}>
+														{error}>
+													</template>
+												</div>
+											</lightning-card>
+										</div>
+									</lightning-card>
+
+
+									<template if:true={sub.termId}>
+										<div style="height:640px" if:true={showNewActive} key={sub.subscription.Id}>
+											<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+												aria-modal="true" aria-describedby="modal-content-id-1"
+												class="slds-modal slds-fade-in-open">
+												<div class="slds-modal__container">
+													<!-- <lightning-card> -->
+														<header class="slds-modal__header">
+															<h2 id={sub.subscription.Id}
+																class="slds-text-heading_medium slds-hyphenate">
+																Add a CE Hour
+															</h2>
+														</header>
+														<!-- <lightning-messages></lightning-messages> -->
+														<!--<template if:true={creditError}>
+                        <div class="slds-theme_error slds-p-around_medium">
+                            <p class="slds-text-color_inverse">Credit date cannot be greater than today.</p>
+                        </div>
+                    </template>-->
+														<!-- <form onsubmit={handleSubmit}> -->
+															<div class="slds-modal__content slds-p-around_medium" >
+																<!--<lightning-input label="Credit Date" type="date" 
+																	class="validate" required value={creditDate}
+																	onchange={handleCreditDateChange} style="padding:10px" datestyle="short"></lightning-input>-->
+																<lightning-input label="Credit Date" type="date" date-style="short" class="validate" required
+                													 value={creditDate} onchange={handleCreditDateChange} style="padding:10px">
+																</lightning-input>
+																
+																<lightning-input label="Number of Credits" type="number"
+																	class="validate" required value={numberOfCredits}
+																	onchange={handleNumberOfCreditsChange} step="0.01" style="padding:10px">
+																</lightning-input>
+																<lightning-input label="Program Title" class="validate"
+																	required value={programTitle}
+																	onchange={handleProgramTitleChange} style="padding:10px">
+																</lightning-input>
+																<lightning-combobox label="Activity Type"
+																	class="validate" required value={activityType}
+																	options={ActivityTypeOptions}
+																	onchange={handleActivityTypeChange} style="padding:10px">
+																</lightning-combobox>
+																<!--<div class="slds-hide">-->
+																<!-- <template if:true={ceHourSelected}>
+																	<lightning-input label="Term" value={termId}
+																		disabled required style="padding:10px"></lightning-input>
+																</template> -->
+																<!--<template if:false={ceHourSelected}>
+																	<lightning-input label="Term" value={termId}
+																		disabled required></lightning-input>
+																</template>-->
+																<!--</div>-->
+																<lightning-combobox label="Education Provider"
+																	class="validate" required value={educationProvider}
+																	options={EducationOptions}
+																	onchange={handleEducationProviderChange} style="padding:10px">
+																</lightning-combobox>
+															</div>
+															<footer class="slds-modal__footer">
+																<lightning-button class="slds-m-right--xxx-small"
+																	variant="neutral" label="Cancel"
+																	onclick={cloesePopup1}>
+																</lightning-button>
+																<lightning-button class="slds-m-top_small"
+																	variant="brand" type="submit" label="Save"
+																	onclick={createCehoursAction}></lightning-button>
+															</footer>
+														<!-- </form> -->
+													<!-- </lightning-card> -->
+												</div>
+											</section>
+											<div class="slds-backdrop slds-backdrop_open"></div>
+										</div>
+									</template>
+
+								</div>
+							</template>
+						</template>
+					</div>
+				</lightning-accordion-section>
+
+				<lightning-accordion-section name="B" label={inactiveCertifications}>
+					<div class="slds-p-horizontal_small">
+						<template if:true={ceHoursInactive}>
+							<template for:each={ceHoursInactive} for:item="sub">
+								<lightning-card icon-name="custom:custom11" key={sub.subscription.Id}>
+									<h3 slot="title">
+										<b>Certification: {sub.subscription.FON_Certification_Item__c} Current Certification Period:</b>
+										&nbsp;<b class="slds-text-body_regular"> (<lightning-formatted-date-time value={sub.subscription.OrderApi__Term_Start_Date__c}></lightning-formatted-date-time> - <lightning-formatted-date-time value={sub.subscription.OrderApi__Term_End_Date__c}></lightning-formatted-date-time>)</b>
+										
+									</h3>
+									<div class="slds-p-horizontal_small">
+										<lightning-card title="CE Hours" icon-name="custom:custom63">
+											<!--<lightning-button data-id={sub.termId}  icon-name="utility:add" variant="brand" label="Add CE Hours" slot="actions" onclick={openPopup2}></lightning-button>-->
+											<div class="slds-m-around_medium">
+												<template if:true={sub.ceHours}>
+													<lightning-datatable key-field="Id" data={sub.ceHours}
+														columns={columns1} hide-checkbox-column="true"
+														show-row-number-column="true" onrowaction={handleRowAction}>
+													</lightning-datatable>
+												</template>
+												<template if:true={error}>
+													{error}>
+												</template>
+											</div>
+										</lightning-card>
+									</div>
+								</lightning-card>
+								<template if:true={sub.termId}>
+									<div style="height:640px" if:true={showNewInActive} key={sub.subscription.Id}>
+										<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+											aria-modal="true" aria-describedby="modal-content-id-1"
+											class="slds-modal slds-fade-in-open">
+											<div class="slds-modal__container">
+												<lightning-record-edit-form id={sub.subscription.Id}
+													object-api-name="CE_Hours__c" onsubmit={handleSubmit}
+													onsuccess={handleRefresh}>
+													<header class="slds-modal__header">
+														<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                                                title="Close">
+                                                            <svg class="slds-button__icon slds-button__icon_large"
+                                                                aria-hidden="true">
+                                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                                            </svg>
+                                                            <span class="slds-assistive-text">Close</span>
+                                                        </button>
+														<h2 id={sub.subscription.Id}
+															class="slds-text-heading_medium slds-hyphenate">
+															Add a CE Hour
+														</h2>
+													</header>
+													<div class="slds-modal__content slds-p-around_medium"
+														id={sub.subscription.Id}>
+														<lightning-card>
+															<lightning-messages></lightning-messages>
+
+															<lightning-input-field class="validate"
+																field-name="Credit_Date__c" required>
+															</lightning-input-field>
+															
+															<lightning-input-field class="validate"
+																field-name="Number_Of_Credits__c"  required>
+															</lightning-input-field>
+															<lightning-input-field field-name="Program_Title__c"
+																required>
+															</lightning-input-field>
+															<lightning-input-field field-name="Activity_Type__c"
+																required>
+															</lightning-input-field>
+															<template if:true={ceHourSelected}>
+																<lightning-input-field field-name="Term__c"
+																	disabled="true" required>
+																</lightning-input-field>
+															</template>
+															<template if:false={ceHourSelected}>
+                                                                <lightning-input-field
+                                                                        field-name="Term__c" value={inActivetermId} disabled="true"
+                                                                        required>
+                                                                </lightning-input-field>
+                                                            </template>
+
+															<lightning-input-field field-name="Education_Provider__c"
+																required>
+															</lightning-input-field>
+														</lightning-card>
+													</div>
+													<footer class="slds-modal__footer">
+														<lightning-button class="slds-m-right--xxx-small"
+															variant="neutral" label="Cancel" onclick={cloesePopup2}>
+														</lightning-button>
+														<lightning-button class="slds-m-top_small" variant="brand"
+															type="submit" label="Save" >
+														</lightning-button>
+													</footer>
+												</lightning-record-edit-form>
+											</div>
+										</section>
+										<div class="slds-backdrop slds-backdrop_open"></div>
+									</div>
+								</template>
+							</template>
+						</template>
+					</div>
+				</lightning-accordion-section>
+			</lightning-card>
+		</lightning-accordion>
+	</div>
+
+	<!--delete confirmation popup-->
+
+	<template if:true={showDeleteModal}>
+		<section role="dialog" tabindex="0" class="slds-modal slds-fade-in-open" onkeydown={handleKeyDown}>
+			<div class="slds-modal__container">
+				<template if:true={header}>
+					<header class="slds-modal__header">
+						<h2 class="slds-modal__title slds-hyphenate">{header}</h2>
+					</header>
+				</template>
+				<template if:false={header}>
+					<header class="slds-modal__header slds-modal__header_empty"></header>
+				</template>
+
+				<div class="slds-modal__content slds-p-around_medium">
+					<slot onslotchange={handleSlotChange}></slot>
+					{bodyText}
+				</div>
+				<footer class="slds-modal__footer slds-is-relative">
+					<lightning-button onclick={closeDeletePopup} label={cancelButtonLabel}
+						class="slds-p-horizontal_xxx-small cancelButton">
+					</lightning-button>
+					<template if:true={confirmButtonLabel}>
+						<lightning-button label={confirmButtonLabel} variant={confirmButtonVariant}
+							onclick={handleDeleteRow} class="slds-p-horizontal_xxx-small confirmButton">
+						</lightning-button>
+					</template>
+					<slot name="customButtons" onfocus={handleModalFocus}>
+						<!--
+                        User to pass in list of lightning-button elements via slot
+                        Example:
+                        <lightning-button label="My Custom Button Label" variant="brand" onclick={myCustomButtonHandler}
+                        class="slds-p-horizontal_xxx-small"></lightning-button>
+                        -->
+					</slot>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>
+</template>

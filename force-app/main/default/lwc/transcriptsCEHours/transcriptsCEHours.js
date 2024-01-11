@@ -10,6 +10,10 @@ import isrenewal from '@salesforce/label/c.HIMSS_Renewal';
 import isrenewalSuccess from '@salesforce/label/c.HIMSS_Success';
 import isCerttificateText	 from '@salesforce/label/c.isCerttificateText';
 import isCerttificate from '@salesforce/label/c.isCerttificate';
+import Certification_Eligible from '@salesforce/label/c.Certification_Eligible';
+import Certification_Notify from '@salesforce/label/c.Certification_Notify';
+import HIMSS_Certification_Period from '@salesforce/label/c.HIMSS_Certification_Period';
+
 import processSubscription from '@salesforce/apex/TranscriptCEHoursController.processSubscription';
 import { NavigationMixin } from "lightning/navigation";
 
@@ -48,7 +52,10 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
         isrenewal,
         isrenewalSuccess,
         isCerttificateText,	
-        isCerttificate
+        isCerttificate,
+        Certification_Eligible,
+        Certification_Notify,
+        HIMSS_Certification_Period
     };
     
     columns = COLUMNS; 
@@ -235,10 +242,67 @@ export default class TranscriptsCEHours extends NavigationMixin(LightningElement
         this.ceHourSelected = null;
         this.termId = null;
     }
- 
+    
+    handleCreditDate(event){
+        //alert('ala');
+        var selected_Value = event.detail.value;
+        //alert(selected_Value);
+        
+
+
+        // var dateval;
+        // dateval = new Date().toISOString().substring(0, 10);
+        // console.log('dateval '+dateval);
+        // var myDate = new Date(dateval);
+        // var myDate1 = new Date(event.detail.value);
+        // if(myDate1 > myDate){
+        //     console.log('error ');
+
+        //     const event = new ShowToastEvent({
+        //         title: 'Error',
+        //         message: 'Invalid input!',
+        //         variant: 'error',
+        //     });
+        //     this.dispatchEvent(event);
+        //     return;
+
+        // }
+
+    }
+
     handleSubmit(event){
         event.preventDefault(); 
         const fields = event.detail.fields;
+        // console.log('fields ' +fields);
+        // console.log('fields1 ' +fields.Credit_Date__c);
+
+        // var dateval;
+        // dateval = new Date().toISOString().substring(0, 10);
+        // console.log('dateval '+dateval);
+        // var myDate = new Date(dateval);
+        // var myDate1 = new Date(fields.Credit_Date__c);
+        // if(myDate1 > myDate){
+        //     console.log('error ');
+
+        //     // const form = this.template.querySelector('lightning-record-edit-form');
+        //     // if (!form.checkValidity()) {
+        //     //     form.reportValidity();
+        //     //     return;
+        //     // }
+
+        //     const inputField = this.template.querySelector('lightning-input-field');
+        //     console.log('inputField '+inputField.fieldName);
+        //     inputField.setCustomValidity('Invalid input!');
+        //     inputField.reportValidity();
+        //     inputField.showHelpMessageIfInvalid();
+        //     return;
+
+        // }
+        // else{
+        //     console.log('success ');
+        // }
+        
+
         //fields.Term__c = this.ceHoursInactive[0];
         this.template.querySelector('lightning-record-edit-form').submit(fields);
         this.showNewActive = false; 

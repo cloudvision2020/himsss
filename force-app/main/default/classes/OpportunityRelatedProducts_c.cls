@@ -118,7 +118,7 @@ public with sharing class OpportunityRelatedProducts_c {
             
                 if (oppLItem.UnitPrice == null)
                 {
-                    oppLItem.TotalPrice = tPrice;
+                    oppLItem.UnitPrice = tPrice;
                 }
                 
                 listToUpsert.add(oppLItem);
@@ -145,21 +145,24 @@ public with sharing class OpportunityRelatedProducts_c {
                             ( opportunityLineItemObj.UnitPrice != opportunityLineItemOldObj.UnitPrice) || 
                             ( opportunityLineItemObj.Start_Date__c != opportunityLineItemOldObj.Start_Date__c) ||
                             ( opportunityLineItemObj.Discount_Percent__c != opportunityLineItemOldObj.Discount_Percent__c) ||
-                            ( opportunityLineItemObj.End_Date__c != opportunityLineItemOldObj.End_Date__c) /*||
+                            ( opportunityLineItemObj.End_Date__c != opportunityLineItemOldObj.End_Date__c) /*|| 
                             ( opportunityLineItemObj.TotalPrice != opportunityLineItemOldObj.TotalPrice)*/){
                              
-                            opportunityLineItemIds.add(opportunityLineItemObj.ID);
-                            List<OpportunityLineItemSchedule>  olis = [select Id from OpportunityLineItemSchedule where OpportunityLineItemId = :opportunityLineItemObj.ID];
+                            opportunityLineItemIds.add(opportunityLineItemObj.ID);                               
+                            //List<OpportunityLineItemSchedule>  olis = [select Id from OpportunityLineItemSchedule where OpportunityLineItemId = :opportunityLineItemObj.ID];
+                            List<OpportunityLineItemSchedule>  olis = [select Id 
+                                                                       from OpportunityLineItemSchedule 
+                                                                       where OpportunityLineItemId = :opportunityLineItemObj.ID 
+                                                                       AND OpportunityLineItem.Opportunity.RecordTypeID =:  Constants.OPPORTUNITY_HIMSS_MEDIA_RECORDTYPEID];
                             delete olis;
                             contractLineItemIds.add(opportunityLineItemObj.Contract_Line_Item__c);
                         }
                         
                     }
                 }
-                OpportunityLineItemTriggerHandler.isBypassTrigger = true;
-                OpportunityLineItemTriggerHandler.deleteOpportunityLineItemAndContractLineItemsSchedule(opportunityLineItemIds,contractLineItemIds);
-            
-                OpportunityLineItemTriggerHandler.isBypassTrigger = false;
+                OpportunityLineItemTriggerHandler.isBypassTrigger = true;                
+                OpportunityLineItemTriggerHandler.deleteOpportunityLineItemAndContractLineItemsSchedule(opportunityLineItemIds,contractLineItemIds);            
+                OpportunityLineItemTriggerHandler.isBypassTrigger = false;               
                 upsert listToUpsert;
                
 

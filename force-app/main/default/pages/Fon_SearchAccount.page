@@ -1,0 +1,409 @@
+<apex:page docType="html-5.0" showHeader="false" standardStylesheets="false" applyBodyTag="false"
+    controller="Fon_SearchAccountCtrl">
+    <!-- Begin Default Content REMOVE THIS -->
+    <apex:composition template="CPBase__template">
+        <apex:define name="pageTitle">
+            Search/Add Company
+        </apex:define>
+        <apex:define name="pageStyles">
+            <style type="text/css">
+                .h1,
+                h1 {
+                    font-size: 42px;
+                    line-height: 50px;
+                    color: #1e22aa;
+                    font-style: italic;
+                    font-family: prometo, 'Trebuchet MS', sans-serif;
+                    letter-spacing: 1px;
+                    font-weight: 700;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    margin: 0.67em 0;
+                }
+
+                .form-group {
+                    margin-bottom: 10px;
+                    /* margin-left: -15px; */
+                    margin-right: -15px;
+                    display: block;
+                }
+
+                .RadAjaxPanel {
+                    display: block;
+                    box-sizing: border-box;
+
+                }
+
+                .col-sm-4 {
+                    width: 33.33333333%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    display: block;
+                }
+
+                nify .required label {
+                    background: none;
+                }
+
+                nify label {
+                    display: initial;
+                    font-weight: initial;
+                    margin-bottom: initial;
+                    max-width: initial;
+                }
+
+                inputFormlabel {
+                    margin-bottom: 18px;
+                }
+
+                .table>thead,
+                .table th,
+                .table thead td,
+                .table thead tr {
+                    font-weight: normal;
+                    background-color: #1E22AA !important;
+                    color: #FFF !important;
+                    text-align: left;
+                    font-weight: 700;
+                }
+            </style>
+            <style>
+                input[type=button]:focus {
+                    color: Black;
+                    background-color: #f8f8f8;
+                }
+
+                input[type=button] {
+                    background-color: transparent;
+                }
+            </style>
+
+
+        </apex:define>
+        <apex:define name="pageMain">
+            <apex:form id="searchCompanyHIMSS">
+                <div>
+                    <!--  ===================================Account Search Code Start========================================  -->
+
+                    <div id="contentBar">
+                        <div class="container">
+                            <div class="row">
+                                <div class="container">
+                                    <apex:outputPanel id="errorpannel">
+                                        <apex:outputPanel rendered="{!isError}">
+                                            <div id="errordiv" class="error"
+                                                style="padding: 2%;background-color: #d83c3c;color: white;border-radius: 7px;font-size: medium;">
+                                                <apex:outputText value="{!errorMessage}" escape="false" />
+                                                
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <h1>Corporate Membership Application - Search/Add Company </h1>
+                                    <p>Please search or add the Company that you represent.</p>
+                                    <div id="ctl00_MainContent_LoadingPanelId" class="RadAjax RadAjax_Default"
+                                        style="display:none;">
+                                        <div class="raDiv"></div>
+                                        <div class="raColor raTransp"></div>
+                                    </div>
+                                    <div id="ctl00_MainContent_Panel1" class="contact-container mobile-way">
+                                        <div id="ctl00_MainContent_ContainerPanel" class="contact-container mobile-way">
+                                            <div id="ctl00_MainContent_ContentPanel">
+                                                <div id="ctl00_MainContent_CompanyLookupPanel">
+                                                    <div id="ctl00_MainContent_CompanyFindControl_ContainerPanel"
+                                                        class="FindCompanyControl_PersonifyDefault Base_PersonifyDefault Base_PersonifyDefault">
+                                                        <div id="ctl00_MainContent_CompanyFindControl_LoadingPanelId"
+                                                            class="RadAjax RadAjax_PersonifyDefault"
+                                                            style="display:none;">
+                                                            <div class="raDiv"></div>
+                                                            <div class="raColor raTransp"></div>
+                                                        </div>
+                                                        <div class="RadAjaxPanel"
+                                                            id="ctl00_ctl00_MainContent_CompanyFindControl_ContentPanelPanel"
+                                                            style="display: block;">
+                                                            <div id="ctl00_MainContent_CompanyFindControl_ContentPanel"
+                                                                style="visibility: visible;">
+                                                                <div
+                                                                    id="ctl00_MainContent_CompanyFindControl_AddressPanel">
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-4">
+                                                                            <div id="ctl00_MainContent_CompanyFindControl_CompanyRow"
+                                                                                class="hide-all required">
+                                                                                <label
+                                                                                    id="ctl00_MainContent_CompanyFindControl_CompanyNameTextBoxLabel"
+                                                                                    for="CompanyNameTextBox"> Company
+                                                                                    Name:
+                                                                                </label>
+
+                                                                            </div>
+                                                                            <!--<span id="ctl00_MainContent_CompanyFindControl_lbCompanyName">Company Name:*</span>-->
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+                                                           
+                                                                            <apex:input value="{!strCompanyName}"
+                                                                                type="text" disabled="false"
+                                                                                styleClass="form-control">
+                                                                            </apex:input>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-4">
+                                                                            <div id="ctl00_MainContent_CompanyFindControl_CountryRow"
+                                                                                class="hide-all required"
+                                                                                maxheight="300"
+                                                                                Style="    margin-top: 18px">
+                                                                                <label
+                                                                                    id="ctl00_MainContent_CompanyFindControl_CountryDropDownListLabel"
+                                                                                    Class="" for="CountryDropDownList">
+                                                                                    Country:
+                                                                                </label> <br />
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+                                                                            <div id="ctl00_MainContent_CompanyFindControl_CountryDropDownList"
+                                                                                class="RadComboBox RadComboBox_PersonifyDefault"
+                                                                                style=";white-space:normal;">
+                                                                                
+                                                                                <table summary="combobox"
+                                                                                    style="border-width:0;border-collapse:collapse;width:100%"
+                                                                                    class="">
+                                                                                    <tbody>
+                                                                                        <tr class=""
+                                                                                            style="border-width:0;border-collapse:collapse;width:100%">
+                                                                                            <td class="rcbInputCell rcbInputCellLeft"
+                                                                                                style="width:100%;padding-left: 0px;padding-right: 0px;">
+                                                                               
+                                                                                                <apex:inputfield label="Action"
+                                                                                                    value="{!objTempAccount.BillingCountry}"
+                                                                                                    id="Action"
+                                                                                                    styleClass="form-control rcbInput radPreventDecorate">
+
+                                                                                                </apex:inputfield>
+                                                                                            </td>
+                                                                            
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                <div class="rcbSlide"
+                                                                                    style="z-index:6000;display:none;">
+                                                                                    <div id="ctl00_MainContent_CompanyFindControl_CountryDropDownList_DropDown"
+                                                                                        class="RadComboBoxDropDown RadComboBoxDropDown_PersonifyDefault ">
+                                                                                        <div class="rcbScroll rcbWidth">
+                                                                                            <ul class="rcbList">
+                                                                                                <li class="rcbItem">
+                                                                                                    United States</li>
+                                                                                                <li class="rcbItem">
+                                                                                                    Afghanistan</li>
+                                                                                                <li class="rcbItem">
+                                                                                                    Albania</li>
+                                                                                                <li class="rcbItem">
+                                                                                                    Algeria</li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <input
+                                                                                    id="ctl00_MainContent_CompanyFindControl_CountryDropDownList_ClientState"
+                                                                                    name="ctl00_MainContent_CompanyFindControl_CountryDropDownList_ClientState"
+                                                                                    type="hidden" autocomplete="off" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+																	-->
+                                                                    
+                                                                    <div id="ctl00_MainContent_CompanyFindControl_ButtonDiv"
+                                                                        class="pull-right" style="padding-top: 20px;">
+                                                                        
+                                                                        <apex:outputPanel id="addCompanyButton" rendered="{!isNotFound}">
+                                                                            <input type="button"
+                                                                                name="ctl00$MainContent$CompanyFindControl$FindCompanyButton"
+                                                                                value="Add Company"
+                                                                                id="ctl00_MainContent_CompanyFindControl_FindCompanyButton"
+                                                                                class="btn btn-default"
+                                                                                onclick="createAccountJSFunc();" />
+                                                                        </apex:outputPanel>
+                                                                        <input type="button"
+                                                                            name="ctl00$MainContent$CompanyFindControl$FindCompanyButton"
+                                                                            value="Find Company"
+                                                                            id="ctl00_MainContent_CompanyFindControl_FindCompanyButton"
+                                                                            class="btn btn-default"
+                                                                            onclick="searchAccountJSFunc();" />
+                                                                        <input type="button"
+                                                                            name="ctl00$MainContent$CompanyFindControl$CancelButton"
+                                                                            value="Cancel"
+																			onclick="cancelAccountJSFunc();"
+                                                                            id="ctl00_MainContent_CompanyFindControl_CancelButton"
+                                                                            class="CancelEditButton btn btn-secondary" />
+                                                                    </div> <br style="clear:both"> </br>
+                                                                </div>
+
+
+
+
+                                                                <apex:actionFunction name="satisfactionComment"
+                                                                    action="{!assignSelectedAccount}"
+                                                                    rerender="myPanel"
+                                                                    status="progressBar">
+                                                                    <apex:param value="" name="myParam"
+                                                                        assignto="{!strSelectedAccId}" />
+                                                                </apex:actionFunction>
+
+                                                                <apex:outputPanel id="refreshSearchAccountList">
+                                                                   <div id="ctl00_MainContent_CompanyFindControl_FoundCompanyPanel"
+                                                                        class="foundCompanyPanel"> &nbsp;
+                                                                        <div id="ctl00_MainContent_CompanyFindControl_CompanyGrid"
+                                                                            class="RadGrid RadGrid_PersonifyDefault"
+                                                                            tabindex="0">
+                                                                            <apex:outputPanel id="refreshAccountPanel"
+                                                                                rendered="{! AND(lstAccWrapper != null, lstAccWrapper.size > 0) }">
+                                                                                <table
+                                                                                    class="rgMasterTable table table-alt-row"
+                                                                                    id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00"
+                                                                                    style="width:100%;table-layout:auto;empty-cells:show;">
+
+                                                                                    <thead>
+                                                                                        <tr class="searchResultHead">
+                                                                                            <th scope="col"
+                                                                                                class="rgHeader">Select
+                                                                                            </th>
+                                                                                            <th scope="col"
+                                                                                                class="rgHeader">Company
+                                                                                            </th>
+                                                                                        </tr>
+
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <apex:repeat value="{!lstAccWrapper}"
+                                                                                            var="eachRecWrapper">
+                                                                                            <tr class="rgRow rgSelectedRow"
+                                                                                                id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00__0">
+                                                                                                <td>
+
+                                                                                                    <input type="radio"
+                                                                                                        onclick="satisfactionComment(this.value);"
+                                                                                                        name="accountRow"
+                                                                                                        value="{!eachRecWrapper.strAccountId}" />
+
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <span
+                                                                                                        id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00_ctl04_CompanyName"
+                                                                                                        class="companyName">{!eachRecWrapper.strAccountName}</span>
+                                                                                                    <br />
+                                                                                                    <span>{!eachRecWrapper.strAccAddress}</span>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </apex:repeat>
+
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                <div>
+                                                                                    <input type="button"
+                                                                                        name="ctl00$MainContentButton"
+                                                                                        value="Continue" onclick="continueAccountJSFunc();"
+                                                                                        id="ctl00_MainContent_CompanyFindControl_SelectCompanyButton"
+                                                                                        class="btn btn-default pull-right" />
+                                                                                </div>
+                                                                            </apex:outputPanel>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </apex:outputPanel>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--  ===================================Account Search Code End========================================  -->
+                    <!--    Business Address    -->
+                    <div style="padding-bottom: 100px;">
+
+
+                    </div>
+
+
+                    <div class="form-horizontal" role="form">
+                        <br /><br />
+                    </div>
+
+
+                </div>
+
+                <apex:actionStatus id="progressBar">
+                    <apex:facet name="start">
+                        <div
+                            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                            &nbsp;
+                        </div>
+                        <div
+                            style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                            <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif"
+                                style="width:20px; height:20px;" />
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>
+
+                <apex:actionFunction action="{!searchAccountByParam}" id="searchAccountActionID"
+                    name="searchAccountAction" reRender="searchCompanyHIMSS" status="progressBar">
+                </apex:actionFunction>
+            	<apex:actionFunction action="{!createAccountByParam}" id="createAccountActionID"
+                    name="createAccountAction" reRender="searchCompanyHIMSS" status="progressBar">
+                </apex:actionFunction>
+            	<apex:actionFunction action="{!nextStep}" id="continueAccountActionID"
+                    name="continueAccountAction" reRender="searchCompanyHIMSS" status="progressBar">
+                </apex:actionFunction>
+				<apex:actionFunction action="{!cancelStep}" name="jsCancelStep" reRender="searchCompanyHIMSS" status="progressBar">
+                </apex:actionFunction>
+            </apex:form><br /><br /><br />
+
+
+            <script>
+        		function cancelAccountJSFunc(){
+                    //alert('Running Javascript createAccountJSFunc'); 
+                	jsCancelStep();
+                    //alert('Finishing Javascript createAccountJSFunc'); 
+                }
+                function searchAccountJSFunc() {
+                    //alert('Running Javascript');           
+                    searchAccountAction();
+                    //alert('Finishing javascript');      
+                }
+        		function createAccountJSFunc(){
+                    //alert('Running Javascript createAccountJSFunc'); 
+                	createAccountAction();
+                    //alert('Finishing Javascript createAccountJSFunc'); 
+                }
+        		function continueAccountJSFunc(){
+                    //alert('Running Javascript createAccountJSFunc'); 
+                	continueAccountAction();
+                    //alert('Finishing Javascript createAccountJSFunc'); 
+                }
+            </script>
+
+            <script type="text/javascript">
+
+
+            </script>
+        </apex:define>
+    </apex:composition>
+
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

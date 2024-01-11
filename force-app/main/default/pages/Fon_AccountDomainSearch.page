@@ -1,0 +1,264 @@
+<apex:page docType="html-5.0" showHeader="false" standardStylesheets="false" applyBodyTag="false"
+    controller="Fon_SearchAccountCtrl" action="{!searchAccountByDomain}">
+    <!-- Begin Default Content REMOVE THIS -->
+    <apex:composition template="CPBase__template">
+        <apex:define name="pageTitle">
+            Search/Add Company
+        </apex:define>
+        <apex:define name="pageStyles">
+            <style type="text/css">
+                .h1,
+                h1 {
+                    font-size: 42px;
+                    line-height: 50px;
+                    color: #1e22aa;
+                    font-style: italic;
+                    font-family: prometo, 'Trebuchet MS', sans-serif;
+                    letter-spacing: 1px;
+                    font-weight: 700;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    margin: 0.67em 0;
+                }
+
+                .form-group {
+                    margin-bottom: 10px;
+                    /* margin-left: -15px; */
+                    margin-right: -15px;
+                    display: block;
+                }
+
+                .RadAjaxPanel {
+                    display: block;
+                    box-sizing: border-box;
+
+                }
+
+                .col-sm-4 {
+                    width: 33.33333333%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    display: block;
+                }
+
+                nify .required label {
+                    background: none;
+                }
+
+                nify label {
+                    display: initial;
+                    font-weight: initial;
+                    margin-bottom: initial;
+                    max-width: initial;
+                }
+
+                inputFormlabel {
+                    margin-bottom: 18px;
+                }
+
+                .table>thead,
+                .table th,
+                .table thead td,
+                .table thead tr {
+                    font-weight: normal;
+                    background-color: #1E22AA !important;
+                    color: #FFF !important;
+                    text-align: left;
+                    font-weight: 700;
+                }
+            </style>
+            <style>
+                input[type=button]:focus {
+                    color: Black;
+                    background-color: #f8f8f8;
+                }
+
+                input[type=button] {
+                    background-color: transparent;
+                }
+            </style>
+
+
+        </apex:define>
+        <apex:define name="pageMain">
+            <apex:form id="searchCompanyHIMSS">
+                <div>
+                    <!--  ===================================Account Search Code Start========================================  -->
+
+                    <div id="contentBar">
+                        <div class="container">
+                            <div class="row">
+                                <div class="container">
+                                    <apex:outputPanel id="form1">
+                                        <apex:pageMessages ></apex:pageMessages>
+                                    </apex:outputPanel>
+                                    <h1>Companies Based On The Domain </h1>
+                                    <apex:outputPanel id="refreshAccountPanel1"
+                                                      rendered="{! AND(lstAccWrapper != null, lstAccWrapper.size > 0) }">
+                                        <p>
+                                            Please select the company that you represent.
+                                        </p>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="refreshAccountPanel2"
+                                                      rendered="{! OR(lstAccWrapper = null, lstAccWrapper.size = 0) }">
+                                        
+                                            <p>We could not match your email address to a current HIMSS Organizational Affiliate.</p>  
+                                            <p>If you believe you’ve reached this message in error, please reach out to your HIMSS primary contact in your organization or your HIMSS account manager.</p>
+                                        
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="errorpannel">
+                                        <apex:outputPanel rendered="{!isError}">
+                                            <div id="errordiv" class="error"
+                                                style="padding: 2%;background-color: #d83c3c;color: white;border-radius: 7px;font-size: medium;">
+                                                <apex:outputText value="{!errorMessage}" escape="false" />
+                                                
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <div id="ctl00_MainContent_LoadingPanelId" class="RadAjax RadAjax_Default"
+                                        style="display:none;">
+                                        <div class="raDiv"></div>
+                                        <div class="raColor raTransp"></div>
+                                    </div>
+                                    <div id="ctl00_MainContent_Panel1" class="contact-container mobile-way">
+                                        <div id="ctl00_MainContent_ContainerPanel" class="contact-container mobile-way">
+                                            <div id="ctl00_MainContent_ContentPanel">
+                                                <div id="ctl00_MainContent_CompanyLookupPanel">
+                                                    <div id="ctl00_MainContent_CompanyFindControl_ContainerPanel"
+                                                        class="FindCompanyControl_PersonifyDefault Base_PersonifyDefault Base_PersonifyDefault">
+                                                        <div id="ctl00_MainContent_CompanyFindControl_LoadingPanelId"
+                                                            class="RadAjax RadAjax_PersonifyDefault"
+                                                            style="display:none;">
+                                                            <div class="raDiv"></div>
+                                                            <div class="raColor raTransp"></div>
+                                                        </div>
+                                                        <div class="RadAjaxPanel"
+                                                            id="ctl00_ctl00_MainContent_CompanyFindControl_ContentPanelPanel"
+                                                            style="display: block;">
+                                                            <div id="ctl00_MainContent_CompanyFindControl_ContentPanel"
+                                                                style="visibility: visible;">
+                                                               
+                                                                <apex:actionFunction name="satisfactionComment"
+                                                                    action="{!assignSelectedAccount}"
+                                                                    rerender="myPanel"
+                                                                    status="progressBar">
+                                                                    <apex:param value="" name="myParam"
+                                                                        assignto="{!strSelectedAccId}" />
+                                                                </apex:actionFunction>
+
+                                                                <apex:outputPanel id="refreshSearchAccountList">
+                                                                   <div id="ctl00_MainContent_CompanyFindControl_FoundCompanyPanel"
+                                                                        class="foundCompanyPanel"> &nbsp;
+                                                                        <div id="ctl00_MainContent_CompanyFindControl_CompanyGrid"
+                                                                            class="RadGrid RadGrid_PersonifyDefault"
+                                                                            tabindex="0">
+                                                                            <apex:outputPanel id="refreshAccountPanel"
+                                                                                rendered="{! AND(lstAccWrapper != null, lstAccWrapper.size > 0) }">
+                                                                                <table
+                                                                                    class="rgMasterTable table table-alt-row"
+                                                                                    id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00"
+                                                                                    style="width:100%;table-layout:auto;empty-cells:show;">
+
+                                                                                    <thead>
+                                                                                        <tr class="searchResultHead">
+                                                                                            <th scope="col"
+                                                                                                class="rgHeader">Select
+                                                                                            </th>
+                                                                                            <th scope="col"
+                                                                                                class="rgHeader">Company
+                                                                                            </th>
+                                                                                        </tr>
+
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <apex:repeat value="{!lstAccWrapper}"
+                                                                                            var="eachRecWrapper">
+                                                                                            <tr class="rgRow rgSelectedRow"
+                                                                                                id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00__0">
+                                                                                                <td>
+
+                                                                                                    <input type="radio"
+                                                                                                        onclick="satisfactionComment(this.value);"
+                                                                                                        name="accountRow"
+                                                                                                        value="{!eachRecWrapper.strAccountId}" />
+
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <span
+                                                                                                        id="ctl00_MainContent_CompanyFindControl_CompanyGrid_ctl00_ctl04_CompanyName"
+                                                                                                        class="companyName">{!eachRecWrapper.strAccountName}</span>
+                                                                                                    <br />
+                                                                                                    <span>{!eachRecWrapper.strAccAddress}</span>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </apex:repeat>
+																					</tbody>
+                                                                                </table>
+                                                                            </apex:outputPanel>
+                                                                            <apex:outputPanel id="refreshAccountPanel3" rendered="{! AND(lstAccWrapper != null, lstAccWrapper.size > 0) }">
+                                                                            	<div>
+                                                                                
+                                                                                	<input type="button"
+                                                                                       name="ctl00$MainContentButton"
+                                                                                       value="Continue" onclick="continueAccountJSFunc();"
+                                                                                       id="ctl00_MainContent_CompanyFindControl_SelectCompanyButton"
+                                                                                       class="btn btn-default pull-right" />
+                                                                            	
+                                                                            	</div>
+                                                                            </apex:outputPanel>
+                                                                            
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </apex:outputPanel>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+
+                <apex:actionStatus id="progressBar">
+                    <apex:facet name="start">
+                        <div
+                            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                            &nbsp;
+                        </div>
+                        <div
+                            style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                            <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif"
+                                style="width:20px; height:20px;" />
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>
+				<apex:actionFunction action="{!nextStep}" id="continueAccountActionID"
+                    name="continueAccountJSFunc" status="progressBar">
+                </apex:actionFunction>
+			</apex:form><br /><br /><br />
+
+            
+            <script>
+            /*
+        		function continueAccountJSFunc(){
+                    continueAccountAction();
+                }
+                */
+            </script>
+			
+        </apex:define>
+    </apex:composition>
+
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

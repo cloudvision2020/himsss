@@ -1,3 +1,7 @@
-.dummy{
+/*.dummy{
 	color : black;
+}*/
+.slds-card{
+	border:1px solid grey !important;
+	border: 1px solid;
 }

@@ -25,9 +25,13 @@ public class ContractLineItemTriggerHandler implements TriggerHandlerInterface
     public void AfterInsert(Map<Id, SObject> newItems) {
 
         createContractLineItemSchedule((Map<Id, Contract_Line_Item__c>) newItems);
+        GenerateNewContractLineItemDiscount.checkIfItemIsDiscounted((Map<Id, Contract_Line_Item__c>) newItems);
     }
  
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {}
+    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {
+        
+        
+    }
  
     public void AfterDelete(Map<Id, SObject> oldItems) {}
  

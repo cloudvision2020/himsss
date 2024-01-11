@@ -94,7 +94,7 @@ global class AuthRegistrationHandler implements Auth.RegistrationHandler{
             //List<String> ven = data.attributeMap.get('venue').split('-');
             String pName = 'Fonteva Customer Community Login';
             Profile p = [SELECT Id FROM profile WHERE name= :pName];
-            u.username = data.email + '@topgolf.members'; 
+            u.username = data.email; 
             u.email = data.email;
             u.lastName = data.lastName;
             u.firstName = data.firstName;

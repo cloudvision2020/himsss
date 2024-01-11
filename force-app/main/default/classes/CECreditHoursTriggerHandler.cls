@@ -26,14 +26,17 @@ public class CECreditHoursTriggerHandler implements TriggerHandlerInterface{
      
     public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {}
  
-    public void BeforeDelete(Map<Id, SObject> oldItems) {}
- 
-    public void AfterInsert(Map<Id, SObject> newItems) {
-        
-        updateSubscriptions((Map<Id, CE_Hours__c>)newItems);
+    public void BeforeDelete(Map<Id, SObject> oldItems) {
+        updateSubscriptions((Map<Id, CE_Hours__c>) oldItems, true);
     }
  
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {}
+    public void AfterInsert(Map<Id, SObject> newItems) {
+        updateSubscriptions((Map<Id, CE_Hours__c>)newItems, false);
+    }
+ 
+    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {
+        updateSubscriptions((Map<Id, CE_Hours__c>)newItems, false);
+    }
  
     public void AfterDelete(Map<Id, SObject> oldItems) {}
  
@@ -42,27 +45,31 @@ public class CECreditHoursTriggerHandler implements TriggerHandlerInterface{
     /**
     * @description after CE Hours 
 	*/
-    private void updateSubscriptions(Map<Id, CE_Hours__c> newItems){
+    private void updateSubscriptions(Map<Id, CE_Hours__c> newItems, Boolean escapeFlag){
         
 
         // Turn OFF Subscription Routing Rule
         Framework.Dispatcher.disableTriggerInContext.put('OrderApi__Subscription__c', true);
 
         Set<Id> setCEHours = new Set<Id>();
-        
+        Set<Id> setDeletedCEHours = new Set<Id>();
         for(CE_Hours__c cEHours : [Select Id, Term__c from CE_Hours__c where Id=:newItems.keyset()]){
             setCEHours.add(cEHours.Term__c);
+            if(escapeFlag) {
+               setDeletedCEHours.add(cEHours.Id);
+            }
         }
 
         List<OrderApi__Subscription__c> lstSub = new List<OrderApi__Subscription__c>();
 
-        for(OrderApi__Renewal__c term: [Select Id, OrderApi__Subscription__c, (Select Id, Activity_Type__c, Education_Provider__c, Number_Of_Credits__c from CE_Hours__r) from OrderApi__Renewal__c where Id=:setCEHours ]){
+        for(OrderApi__Renewal__c term: [Select Id, OrderApi__Subscription__c, (Select Id, Activity_Type__c, Education_Provider__c, Number_Of_Credits__c from CE_Hours__r where Id NOT IN : setDeletedCEHours) from OrderApi__Renewal__c where Id=:setCEHours ]){
             if(term.CE_Hours__r.size() > 0){
                 OrderApi__Subscription__c sub = new OrderApi__Subscription__c();
                 sub.Id = term.OrderApi__Subscription__c;
                 Decimal approvedHours = 0;
                 Decimal nonApprovedHours = 0;
                 Decimal noEthics = 0;
+                Decimal noDigitalHealthCanada = 0;
 
                 for(CE_Hours__c cEHours : term.CE_Hours__r){
                     if(cEHours.Education_Provider__c == 'NON-HIMSS'){
@@ -73,10 +80,17 @@ public class CECreditHoursTriggerHandler implements TriggerHandlerInterface{
                     if(cEHours.Activity_Type__c == 'Ethics'){
                         noEthics = noEthics + cEHours.Number_Of_Credits__c;
                     }
+
+                    if(cEHours.Education_Provider__c == 'Digital Health Canada'){
+                        noDigitalHealthCanada = noDigitalHealthCanada + cEHours.Number_Of_Credits__c;
+                    }
+
+
                 }
                 sub.Active_Term_Approved_HIMSS_CE_Hours__c =  approvedHours;
                 sub.Active_Term_Non_Approved_CE_Hours__c = nonApprovedHours;
                 sub.Active_Term_CE_Hours__c = nonApprovedHours + approvedHours;
+                sub.Active_Term_Digital_Health_Canada_approv__c = noDigitalHealthCanada;
                 sub.No__c = noEthics;
                 lstSub.add(sub);
             }

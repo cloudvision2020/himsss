@@ -1,0 +1,488 @@
+<apex:page docType="html-5.0" showHeader="false" standardStylesheets="false" applyBodyTag="false"
+    controller="Fon_SearchAccountCtrl">
+    <!-- Begin Default Content REMOVE THIS -->
+    <apex:composition template="CPBase__template">
+        <apex:define name="pageTitle">
+            Search/Add Company
+        </apex:define>
+        <apex:define name="pageStyles">
+            <style type="text/css">
+                .container>.row>.container {
+                    padding-top: 20px;
+                    padding-bottom: 40px;
+                    width: 1170px;
+                }
+
+                .container {
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    margin-right: auto;
+                    margin-left: auto;
+                }
+
+                .ctrlContent {
+                    margin: 0 0 20px 0;
+                    min-height: 50px;
+                    position: relative;
+                    border: 1px solid #e7e7e7;
+                    padding: 1em;
+                    border-radius: 0.4em;
+                    background-color: #F5F5F5;
+                    height: 450px;
+                }
+
+                .notes {
+                    font-size: .9em;
+                    font-style: italic;
+                    color: #999;
+                }
+
+                p {
+                    margin: 0 0 10px;
+                    font-family: Verlag, 'Century Gothic', sans-serif;
+                    font-weight: 100;
+                }
+
+                @media (min-width: 992px) .col-md-6 {
+                    width: 50%;
+                    float: left;
+                }
+
+                .col-lg-1,
+                .col-lg-10,
+                .col-lg-11,
+                .col-lg-12,
+                .col-lg-2,
+                .col-lg-3,
+                .col-lg-4,
+                .col-lg-5,
+                .col-lg-6,
+                .col-lg-7,
+                .col-lg-8,
+                .col-lg-9,
+                .col-md-1,
+                .col-md-10,
+                .col-md-11,
+                .col-md-12,
+                .col-md-2,
+                .col-md-3,
+                .col-md-4,
+                .col-md-5,
+                .col-md-6,
+                .col-md-7,
+                .col-md-8,
+                .col-md-9,
+                .col-sm-1,
+                .col-sm-10,
+                .col-sm-11,
+                .col-sm-12,
+                .col-sm-2,
+                .col-sm-3,
+                .col-sm-4,
+                .col-sm-5,
+                .col-sm-6,
+                .col-sm-7,
+                .col-sm-8,
+                .col-sm-9,
+                .col-xs-1,
+                .col-xs-10,
+                .col-xs-11,
+                .col-xs-12,
+                .col-xs-2,
+                .col-xs-3,
+                .col-xs-4,
+                .col-xs-5,
+                .col-xs-6,
+                .col-xs-7,
+                .col-xs-8,
+                .col-xs-9 {
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                }
+
+                .h3,
+                h3 {
+                    font-size: 28px;
+                    line-height: 35px;
+                    font-family: Verlag, 'Century Gothic', sans-serif;
+                    font-weight: 100;
+                    color: #1e22aa;
+                    letter-spacing: 1px;
+                }
+
+                .h1,
+                .h2,
+                .h3,
+                h1,
+                h2,
+                h3 {
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+
+                .form-group {
+                    margin-bottom: 10px;
+                    margin-right: -15px;
+                    display: block;
+                    padding-bottom: 40px;
+                }
+
+                .hide-all {
+                    display: none;
+                }
+            </style>
+            <style>
+
+            </style>
+
+
+        </apex:define>
+        <apex:define name="pageMain">
+            <apex:form id="searchCompanyHIMSS">
+                <div>
+
+                    <!--  ===================================Account Create Code Start========================================  -->
+
+
+                    <div class="container">
+                        <h1> <span id="ctl00_MainContent_lblTitle"></span></h1>
+                        <p>Please share your organization information. And click next to proceed.</p>
+                        <div id="ctl00_MainContent_CompanyRegistrationControl_LoadingPanelId"
+                            class="RadAjax RadAjax_PersonifyDefault" style="display:none;">
+                            
+                            
+                            <div class="raDiv"> </div>
+                            <div class="raColor raTransp"> </div>
+                        </div>
+                        <div id=""
+                            class="usercontrols_companyregistrationcontrol_ascx_PersonifyDefault Base_PersonifyDefault Base_PersonifyDefault">
+                            <div class="RadAjaxPanel"
+                                id="ctl00_ctl00_MainContent_CompanyRegistrationControl_ContentPanelPanel"
+                                style="display: block;">
+                                <div id=""
+                                    onkeypress="javascript:return WebForm_FireDefaultButton(event, 'ctl00_MainContent_CompanyRegistrationControl_ContinueButton')">
+                                    <div id="" style="display:none;">
+                                        <!-- 2020.1.219.40 -->
+                                        <div id="" class="confirmWindow clearedPassword" style="display:none;">
+                                            <div id="" style="display:none;">
+                                                <div id="">
+                                                    <div> You have successfully added the following employee to the
+                                                        group listed below. </div> <br />
+                                                    <div>
+                                                        <div>Name: <span id="" class="bold"></span></div> <br />
+                                                        <div>Group: <span id="" class="bold"></span></div>
+                                                    </div> <br /> <input type="button" name="btnReturnToRoster"
+                                                        value="Return to Roster" onclick="" id="ctl00_MainContent"
+                                                        class="primary" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="" style="display:none;">
+                                            <div class="rwDialogPopup radalert">
+                                                <div class="rwDialogText"> {1} </div>
+                                                <div>
+                                                    <a onclick="" class="rwPopupButton" href="javascript:void(0);">
+                                                        <span class="rwOuterSpan"> <span
+                                                                class="rwInnerSpan">##LOC[OK]##</span> </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="" style="display:none;">
+                                            <div class="rwDialogPopup radprompt">
+                                                <div class="rwDialogText"> {1} </div>
+                                                <div> <a onclick="" class="rwPopupButton"
+                                                        href="javascript:void(0);"><span class="rwOuterSpan"><span
+                                                                class="rwInnerSpan">##LOC[OK]##</span></span></a> <a
+                                                        onclick="$find('{0}').close(null);" class="rwPopupButton"
+                                                        href="javascript:void(0);"><span class="rwOuterSpan"><span
+                                                                class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="" style="display:none;">
+                                            <div class="rwDialogPopup radconfirm">
+                                                <div class="rwDialogText"> {1} </div>
+                                                <div>
+                                                    <a onclick="$find('{0}').close(true);" class="rwPopupButton"
+                                                        href="javascript:void(0);"><span class="rwOuterSpan"><span
+                                                                class="rwInnerSpan">##LOC[OK]##</span></span>
+                                                    </a>
+                                                    <a onclick="$find('{0}').close(false);" class="rwPopupButton"
+                                                        href="javascript:void(0);"><span class="rwOuterSpan"><span
+                                                                class="rwInnerSpan">##LOC[Cancel]##</span></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div><input id="" name="" type="hidden" />
+                                    </div>
+                                    <apex:outputPanel id="errorpannel">
+                                        <apex:outputPanel rendered="{!isError}">
+                                            <div id="errordiv" class="error"
+                                                style="padding: 2%;background-color: #d83c3c;color: white;border-radius: 7px;font-size: medium;">
+                                                <apex:outputText value="{!errorMessage}" escape="false" />
+                                                
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <div id="">
+                                        <div class="ctrlContent">
+                                            
+                                        <br/>
+                                            <div headertext="Please review and fix the following errors:"
+                                                validationgroup="RegistrationGroupctl00_MainContent_CompanyRegistrationControl"
+                                                id="" class="alert alert-error" style="display:none;"> </div>
+                                            <p class="notes">* Indicates a required field.</p>
+                                            <div id="">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h3>Name and Contact</h3>
+                                                        <div class="form-group">
+                                                            <div id="ctl00_MainContent_CompanyRegistrationControl_company"
+                                                                class="col-sm-4">
+                                                                <div id="" class="hide-all required"> <label
+                                                                        id="">Company Name:</label><br /> </div> Company
+                                                                Name:<b style="color:#FF0000">*</b>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                            <!--
+                                                                <apex:InputField id="accountNameId"
+                                                                    value="{!objNewAccount.Name}"
+                                                                    styleClass="form-control" />
+                                                             -->   
+																<apex:input value="{!strCompanyName}" type="text" disabled="false" styleClass="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4">
+                                                                <div id="ctl00_MainContent_CompanyRegistrationControl_WebsiteRow"
+                                                                    class="hide-all required">
+                                                                    <label id=""
+                                                                        for="WebsiteTextBox">Website:</label><br />
+                                                                </div> Website:<b style="color:#FF0000">*</b>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <!--<input name="ctl00$WebsiteTextBox" type="text" id="" class="form-control"/> -->
+                                                                <apex:input value="{!website}" type="text" disabled="false" styleClass="form-control" />
+                                                                <!--<apex:InputField id="accountPhoneId" value="{!website}" styleClass="form-control" />-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4">
+                                                                <div id="ctl00_MainContent_CompanyRegistrationControl_WebsiteRow"
+                                                                    class="hide-all required">
+                                                                    <label id=""
+                                                                        for="WebsiteTextBox">Phone:</label><br />
+                                                                </div> Phone:<b style="color:#FF0000">*</b>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <!--<input name="ctl00$WebsiteTextBox" type="text" id="" class="form-control"/>-->
+                                                                <apex:input value="{!phone}" type="text" disabled="false" styleClass="form-control" />
+                                                                <!--<apex:InputField id="accountWebsiteId" value="{!phone}" styleClass="form-control" />-->
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3>Address</h3>
+                                                        <div id=""
+                                                            class="AddressEditControl_PersonifyDefault Base_PersonifyDefault Base_PersonifyDefault">
+                                                            <div id="" class="RadAjax RadAjax_PersonifyDefault"
+                                                                style="display:none;">
+                                                                <div class="raDiv"> </div>
+                                                                <div class="raColor raTransp"> </div>
+                                                            </div>
+                                                            <div class="RadAjaxPanel" id="" style="display: block;">
+                                                                <div id="">
+                                                                    <div id="" style="display:none;">
+                                                                        <div id="" class="confirmWindow addr mobile-way"
+                                                                            style="display:none;">
+                                                                            <div id="" style="display:none;">
+                                                                                <div class="ctrlContent">
+                                                                                    <p class="validatedDescription">We
+                                                                                        are unable to identify this as a
+                                                                                        valid address. Please ensure all
+                                                                                        information is correct. Click
+                                                                                        Continue to save or Edit to
+                                                                                        change this address.</p>
+                                                                                    <p class="validatedQuestion">What
+                                                                                        would you like to do?</p>
+                                                                                    <div class="buttonRow mobile-way">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div id="" style="display:none;">
+                                                                            <div class="rwDialogPopup radprompt">
+                                                                                <div class="rwDialogText"> {1} </div>
+
+                                                                                <div> <a onclick=""
+                                                                                        class="rwPopupButton"
+                                                                                        href="javascript:void(0);"><span
+                                                                                            class="rwOuterSpan"><span
+                                                                                                class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                                                                                    <a onclick="$find('{0}').close(null);"
+                                                                                        class="rwPopupButton"
+                                                                                        href="javascript:void(0);"><span
+                                                                                            class="rwOuterSpan"><span
+                                                                                                class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="" style="display:none;">
+                                                                            <div class="rwDialogPopup radconfirm">
+                                                                                <div class="rwDialogText"> {1} </div>
+                                                                                <div>
+                                                                                    <a onclick="" class="rwPopupButton"
+                                                                                        href="javascript:void(0);">
+                                                                                        <span class="rwOuterSpan"><span
+                                                                                                class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                                                                                    <a onclick="" class="rwPopupButton"
+                                                                                        href="javascript:void(0);">
+                                                                                        <span class="rwOuterSpan">
+                                                                                            <span
+                                                                                                class="rwInnerSpan">##LOC[Cancel]##</span>
+                                                                                        </span>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="">
+
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-4">
+                                                                                <div id="" class="hide-all required">
+                                                                                    <label id=""
+                                                                                        for="AddressLine1TextBox">Country:</label><br />
+                                                                                </div> <span id="">Country:<b style="color:#FF0000">*</b></span>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <!--<input name="" type="text" maxlength="65" id="" class="form-control"/>-->
+                                                                                <apex:input value="{!billingCountry}" type="text" disabled="false" styleClass="form-control" />
+                                                                                <!--<apex:InputField id="accountBillingCountryId" value="{!billingCountry}" styleClass="form-control" />-->
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-4">
+                                                                                <div id="" class="hide-all required">
+                                                                                    <label id=""
+                                                                                        for="AddressLine1TextBox">Street
+                                                                                        :</label><br />
+                                                                                </div> <span id="">Street :<b style="color:#FF0000">*</b></span>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <!--<input name="" type="text" maxlength="65" id="" class="form-control"/> -->
+                                                                                <apex:input value="{!billingStreet}" type="text" disabled="false" styleClass="form-control" />
+                                                                                <!--<apex:InputField id="accountBillingStreetId" value="{!billingStreet}" styleClass="" style="height: 40px;" />-->
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-4">
+                                                                                <div id="" class="hide-all required">
+                                                                                    <label id=""
+                                                                                        for="CityTextBox">City:</label><br />
+                                                                                </div> <span id="">City:<b style="color:#FF0000">*</b></span>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <!--<input name="" type="text" maxlength="40" id="" class="form-control"/> -->
+                                                                                <apex:input value="{!billingCity}" type="text" disabled="false" styleClass="form-control" />
+                                                                                <!--<apex:InputField id="accountBillingCitytId" value="{!billingCity}" styleClass="form-control" />-->
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-4">
+                                                                                <div id="" class="hide-all required">
+                                                                                    <label id=""
+                                                                                        for="CityTextBox">State:</label><br />
+                                                                                </div> <span id="">State:<b style="color:#FF0000">*</b></span>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <!--<input name="" type="text" maxlength="40" id="" class="form-control"/> -->
+                                                                                <apex:input value="{!billingState}" type="text" disabled="false" styleClass="form-control" />
+                                                                                <!--<apex:InputField id="accountBillingStateId" value="{!billingState}" styleClass="form-control" />-->
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-4">
+                                                                                <div id="" class="hide-all required">
+                                                                                    <label id=""
+                                                                                        for="ZipCodeTextBox">Zip
+                                                                                        Code:</label> &nbsp; <br />
+                                                                                </div>
+                                                                                <span id="">Zip Code:<b style="color:#FF0000">*</b></span>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <!--<input name="" type="text" maxlength="15" id="" class="form-control"/> -->
+                                                                                <apex:input value="{!billingPostalCode}" type="text" disabled="false" styleClass="form-control" />
+                                                                                <!--<apex:InputField id="accountBillingPostalCodeId" value="{!billingPostalCode}" styleClass="form-control" />-->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="RadAjaxPanel" id="" style="display: block;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="" class="pull-right">
+                                                <input type="button"
+                                                    name="ctl00$MainContent$CompanyRegistrationControl$ContinueButton"
+                                                    value="Next" onclick="saveAccount();" id=""
+                                                    class="btn btn-default" />
+                                                <input type="button"
+                                                    name="ctl00$MainContent$CompanyRegistrationControl$CancelButton"
+                                                    value="Cancel" onclick="cancelStep();" id=""
+                                                    class="CancelEditButton btn btn-secondary" />
+                                            </div>
+                                            <apex:actionFunction action="{!saveAccount}" id="saveAccountActionID"
+                                                name="saveAccount" status="progressBar">
+                                            </apex:actionFunction>
+                                            <apex:actionFunction action="{!cancelStep}" name="cancelStep" status="progressBar">
+                							</apex:actionFunction>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+					<!--  ===================================Account Create Code End========================================  -->
+                    <!--    Business Address    -->
+                    <div style="padding-bottom: 100px;">
+
+
+                    </div>
+                </div>
+
+                <apex:actionStatus id="progressBar">
+                    <apex:facet name="start">
+                        <div
+                            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                            &nbsp;
+                        </div>
+                        <div
+                            style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                            <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif"
+                                style="width:20px; height:20px;" />
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>
+
+            </apex:form><br /><br /><br />
+
+
+            <script type="text/javascript">
+				
+
+            </script>
+        </apex:define>
+    </apex:composition>
+
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

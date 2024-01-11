@@ -26,7 +26,7 @@ public void execute(Database.BatchableContext BC,OrderApi__Subscription__c[] lst
 }
 
 public void finish(Database.BatchableContext BC){   
-    list<EmailTemplate> template = [Select id,body,subject from EmailTemplate where developername =: System.Label.Fon_Audit_Template_Name];     
+    /*list<EmailTemplate> template = [Select id,body,subject from EmailTemplate where developername =: System.Label.Fon_Audit_Template_Name];     
     if(template.size()>0){
         list<Messaging.SingleEmailMessage> emailList=new list<Messaging.SingleEmailMessage>();
         if(!contactList.isEmpty()){                
@@ -47,6 +47,6 @@ public void finish(Database.BatchableContext BC){
         if(!emailList.isEmpty()){
             Messaging.sendEmail(emailList,false);
         }         
-    }        
+    } */       
 }
 }

@@ -6,5 +6,10 @@
         <minorNumber>1</minorNumber>
         <namespace>OrderApi</namespace>
     </packageVersions>
+    <packageVersions>
+        <majorNumber>4</majorNumber>
+        <minorNumber>516</minorNumber>
+        <namespace>SDOC</namespace>
+    </packageVersions>
     <status>Active</status>
 </ApexClass>

@@ -346,6 +346,7 @@ public with sharing class OpportunityProductEditableList_c {
             toDisplayWrapper.fileDetailWrapper = listWrapper;
             listToDisplayWrapper.add(toDisplayWrapper);
         }
+        System.debug('List to Display Wrapper---'+listToDisplayWrapper);
         return listToDisplayWrapper;
         
         

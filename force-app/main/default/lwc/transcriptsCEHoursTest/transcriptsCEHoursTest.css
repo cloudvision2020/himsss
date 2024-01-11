@@ -1,0 +1,23 @@
+/*.dummy{
+	color : black;
+}*/
+.slds-card{
+	border:1px solid grey !important;
+	border: 1px solid;
+}
+
+.fieldLable {
+	color : lightgrey !important;
+}
+.slds-form-element__label{
+	color : lightgrey !important;
+}
+.slds-truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	
+}
+.custom-truncate {
+    white-space: normal; 
+}

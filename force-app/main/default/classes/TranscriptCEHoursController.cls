@@ -2,10 +2,16 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 05-05-2023
+ * @last modified on  : 05-12-2023
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-public class TranscriptCEHoursController {
+public without sharing class TranscriptCEHoursController {
+    @AuraEnabled( cacheable=true )
+    public static User getUserInfo() {
+        system.debug('***TranscriptCEHoursController getUserInfo***');
+        return [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() limit 1];
+    }
+
     @AuraEnabled( cacheable = true )  
     public static  List<CEHoursWrapper> fetchCEHoursActive(boolean isActive ) {  
         return getData(isActive);
@@ -16,14 +22,14 @@ public class TranscriptCEHoursController {
     }
     public static List<CEHoursWrapper> getData(boolean isActive){
         List<CEHoursWrapper> wrapperList = new  List<CEHoursWrapper>();
-		
+        
         List<User> user = [Select id, contactId FROM USER Where id=:UserInfo.getUserId()];
         
         Map<Id,OrderApi__Subscription__c> subscriptions;
         
         if(isActive){
-            subscriptions = new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,
-                                                                 Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c,
+            subscriptions = new Map<Id,OrderApi__Subscription__c>([Select Id, FON_Certification_Item__c, Name, FON_Override_Submit_Logic__c, Is_Submit__c, Is_CE_Hours__c,Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,Recert_Eligible_Date__c,
+                                                                 Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c,OrderApi__Term_Start_Date__c, OrderApi__Term_End_Date__c, OrderApi__Grace_Period_End_Date__c,
                                         (Select Id,Name, OrderApi__Subscription__c 
                                         FROM OrderApi__Renewals__r Where OrderApi__Is_Active__c=true
                                         order by createdDate DESC LIMIT 1) 
@@ -33,8 +39,8 @@ public class TranscriptCEHoursController {
                                         AND Is_Certificate__c=TRUE]); 
         }
         else{
-            subscriptions =  new Map<Id,OrderApi__Subscription__c>([Select Id, Name, Is_Submit__c, Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,
-                                                                   Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c,
+            subscriptions =  new Map<Id,OrderApi__Subscription__c>([Select Id, Name, FON_Certification_Item__c, FON_Override_Submit_Logic__c, Is_Submit__c, Is_CE_Hours__c,Active_Term_Approved_HIMSS_CE_Hours__c, OrderApi__Activated_Date__c, OrderApi__Paid_Through_Date__c,
+                                                                   Active_Term_Non_Approved_CE_Hours__c, Active_Term_CE_Hours__c, OrderApi__Item__r.Name, Is_Renewal__c, OrderApi__Term_Start_Date__c, OrderApi__Term_End_Date__c, OrderApi__Grace_Period_End_Date__c,
                                         (Select Id,Name, OrderApi__Subscription__c 
                                         FROM OrderApi__Renewals__r order by createdDate DESC
                                         LIMIT 1)  
@@ -45,11 +51,19 @@ public class TranscriptCEHoursController {
         }
 
         if(!subscriptions.isEmpty()){
+            Set<Id> setTermIds = new Set<Id>();
+            for(OrderApi__Subscription__c sub : subscriptions.values()){
+                if(!sub.OrderApi__Renewals__r.isEmpty()){
+                    setTermIds.add(sub.OrderApi__Renewals__r[0].Id);
+                }
+               
+            }
+            
             List<CE_Hours__c> ceHours = [SELECT Id, Name, Credit_Date__c, Education_Provider__c,
                                                 Activity_Type__c,Number_Of_Credits__c,Program_Title__c,Term__c,
                                                 Term__r.OrderApi__Subscription__c,Term__r.Name 
                                                 FROM CE_Hours__c 
-                                                WHERE Term__r.OrderApi__Subscription__c =:subscriptions.keySet()];
+                                                WHERE Term__c =:setTermIds];
             
             Map<Id,List<CE_Hours__c>> subMap = new Map<Id,List<CE_Hours__c>>();
             for(CE_Hours__c hour : ceHours){
@@ -60,15 +74,17 @@ public class TranscriptCEHoursController {
                 hrs.add(hour);
                 subMap.put(hour.Term__r.OrderApi__Subscription__c,hrs);
             }
-            for(OrderApi__Subscription__c sub : subscriptions.values()){
             
+            for(OrderApi__Subscription__c sub : subscriptions.values()){
                 CEHoursWrapper wrapp = new  CEHoursWrapper();
                 wrapp.subscription = sub;
                 if(!sub.OrderApi__Renewals__r.isEmpty()){
                     wrapp.termId = sub.OrderApi__Renewals__r[0].Id;
                 }
-                if(subMap.get(sub.Id)!=null && !subMap.get(sub.Id).isEmpty()){
-                    wrapp.ceHours = subMap.get(sub.Id);
+                for(CE_Hours__c hour : ceHours) {
+                    if(subMap.get(sub.Id)!=null && !subMap.get(sub.Id).isEmpty()){
+                        wrapp.ceHours = subMap.get(sub.Id);
+                    }
                 }
                 wrapperList.add(wrapp);
             }
@@ -108,6 +124,14 @@ public class TranscriptCEHoursController {
             ceHours = new  List<CE_Hours__c >();
         }
     } 
+
+    @AuraEnabled(cacheable=true)
+    public static OrderApi__Renewal__c getTerm(Id termId) {
+        system.debug('getTerm/OrderApi__Renewal__c object');
+        return [SELECT Id, OrderApi__Term_Start_Date__c, OrderApi__Grace_Period_End_Date__c, OrderApi__Term_End_Date__c FROM OrderApi__Renewal__c WHERE Id = :termId LIMIT 1];
+    }
+
+
     @AuraEnabled
     public static string processSubscription(String subId) {
         String encryptId = '';
@@ -117,23 +141,27 @@ public class TranscriptCEHoursController {
         Map<Id, OrderApi__Sales_Order__c> contactToSOMap = new Map<Id,OrderApi__Sales_Order__c>();
         
         String termId = '';
-		List<OrderApi__Subscription__c> listSub = [SELECT Id,
+        List<OrderApi__Subscription__c> listSub = [SELECT Id,
                                                         OrderApi__Contact__c,
+                                                        OrderApi__Grace_Period_End_Date__c,
                                                         OrderApi__Item__c,
                                                         OrderApi__Item__r.Recertification_Fee__c,
                                                         Recertification_Fee_Item__c,
                                                         OrderApi__Subscription_Plan__c,
-                                                        OrderApi__Account__c,(Select Id, Renewal_Sales_Order__c, Renewal_Sales_Order__r.OrderApi__Encrypted_Id__c from OrderApi__Renewals__r ORDER BY CreatedDate DESC limit 1)
-          												FROM OrderApi__Subscription__c
-          												WHERE Id=:subId];
+                                                        OrderApi__Account__c,Recert_Eligible_Date__c,(Select Id, 
+                                                        Renewal_SalesOrder__c, 
+                                                        Renewal_SalesOrder__r.OrderApi__Encrypted_Id__c 
+                                                        from OrderApi__Renewals__r ORDER BY CreatedDate DESC limit 1)
+                                                        FROM OrderApi__Subscription__c
+                                                        WHERE Id=:subId];
         system.debug('>>. > > '+ listSub[0].OrderApi__Item__r.Recertification_Fee__c);
         for (OrderApi__Subscription__c sub : listSub) {
-        	OrderApi__Sales_Order__c salesOrder = createSalesOrder(sub.OrderApi__Account__c, sub);
-          	contactToSOMap.put(sub.OrderApi__Contact__c, salesOrder);
+            OrderApi__Sales_Order__c salesOrder = createSalesOrder(sub.OrderApi__Account__c, sub);
+            contactToSOMap.put(sub.OrderApi__Contact__c, salesOrder);
             if(sub.OrderApi__Renewals__r.size() > 0){
                 termId = sub.OrderApi__Renewals__r[0].Id;
-                if(sub.OrderApi__Renewals__r[0].Renewal_Sales_Order__c != null){
-                    encryptId = sub.OrderApi__Renewals__r[0].Renewal_Sales_Order__r.OrderApi__Encrypted_Id__c;
+                if(sub.OrderApi__Renewals__r[0].Renewal_SalesOrder__c != null){
+                    encryptId = sub.OrderApi__Renewals__r[0].Renewal_SalesOrder__r.OrderApi__Encrypted_Id__c;
                     return encryptId;
                 }
             }
@@ -143,13 +171,13 @@ public class TranscriptCEHoursController {
         List<OrderApi__Sales_Order__c> updateOrders = new List<OrderApi__Sales_Order__c>();
         
         for (OrderApi__Sales_Order__c record : contactToSOMap.values()) {
-          	contactToSOMapStateful.put(record.OrderApi__Contact__c, record);
+            contactToSOMapStateful.put(record.OrderApi__Contact__c, record);
         }
         for (OrderApi__Subscription__c sub : listSub) {
-          	if(contactToSOMapStateful.get(sub.OrderApi__Contact__c)!=null){
-              	Id soid = contactToSOMapStateful.get(sub.OrderApi__Contact__c).Id;
-              	updateOrders.add(new OrderApi__Sales_Order__c(Id = soid,OrderApi__is_Closed__c = true,OrderApi__Status__c = 'Closed'));
-              	lines.add(createOrderLines(sub.OrderApi__Account__c , soid, sub));
+            if(contactToSOMapStateful.get(sub.OrderApi__Contact__c)!=null){
+                Id soid = contactToSOMapStateful.get(sub.OrderApi__Contact__c).Id;
+                updateOrders.add(new OrderApi__Sales_Order__c(Id = soid,OrderApi__is_Closed__c = true,OrderApi__Status__c = 'Closed'));
+                lines.add(createOrderLines(sub.OrderApi__Account__c , soid, sub));
                 if(sub.Recertification_Fee_Item__c != null){
                     FDService.SalesOrderLine line = FDService.SalesOrderLine.getInstance();
                     line.salesOrder = soid;
@@ -158,17 +186,17 @@ public class TranscriptCEHoursController {
                     line.entity = 'Contact';
                     lines.add(line);
                 }
-          	}	
+            }   
         }
         if(!lines.isEmpty()) {
-          	lines = orderService.addItemsToOrder(lines);
+            lines = orderService.addItemsToOrder(lines);
         }
         if(updateOrders.size()>0){
             update updateOrders;
             
             OrderApi__Renewal__c term = new OrderApi__Renewal__c();
             term.Id = termId;
-            term.Renewal_Sales_Order__c = updateOrders[0].Id;
+            term.Renewal_SalesOrder__c = updateOrders[0].Id;
             term.Is_Attested__c = true;
             
             Framework.Dispatcher.disableTriggerInContext.put('OrderApi__Renewal__c', true);
@@ -189,10 +217,11 @@ public class TranscriptCEHoursController {
         salesOrder.OrderApi__is_Closed__c = false;
         salesOrder.OrderApi__is_Proforma__c = true;
         salesOrder.OrderApi__schedule_Type__c = 'Simple Receipt';
+        salesOrder.OrderApi__Entity__c = 'Contact';
         return salesOrder;
-  	}
+    }
     
-  	public static FDService.SalesOrderLine createOrderLines(Id parentAccId, Id soid, OrderApi__Subscription__c sub){
+    public static FDService.SalesOrderLine createOrderLines(Id parentAccId, Id soid, OrderApi__Subscription__c sub){
         FDService.SalesOrderLine line = FDService.SalesOrderLine.getInstance();
         line.salesOrder = soid;
         line.item = sub.OrderApi__Item__c;
@@ -213,7 +242,7 @@ public class TranscriptCEHoursController {
             job.SDOC__Start__c = true;
             job.SDOC__Oid__c = subId;
             job.SDOC__ObjApiName__c = 'OrderApi__Subscription__c';
-        	job.SDOC__Doclist__c = lstSub[0].Certificate__c;
+            job.SDOC__Doclist__c = lstSub[0].Certificate__c;
             insert job;
     
             return job.Id;
@@ -231,6 +260,40 @@ public class TranscriptCEHoursController {
         }
 
         return null;
+    }
+    
+    @AuraEnabled
+    public static CEHoursEditWrapper editCEHours(String subId) {
+        List<CE_Hours__c> ceHours = [SELECT Id, Name, Credit_Date__c, Education_Provider__c,
+                                                Activity_Type__c,Number_Of_Credits__c,Program_Title__c,Term__c
+                                                FROM CE_Hours__c 
+                                                WHERE Id =: subId];
+        
+        if(ceHours.size() > 0) {
+            CEHoursEditWrapper ceWrap = new CEHoursEditWrapper();
+            ceWrap.creditDate = ceHours[0].Credit_Date__c;
+            ceWrap.creditNumber = ceHours[0].Number_Of_Credits__c;
+            ceWrap.programTitle = ceHours[0].Program_Title__c;
+            ceWrap.activityType = ceHours[0].Activity_Type__c;
+            
+            ceWrap.educationProvider = ceHours[0].Education_Provider__c;
+            return ceWrap;
+        }
+        return null;
+    }
+    
+    public class CEHoursEditWrapper{
+        @AuraEnabled
+        public date creditDate;
+        @AuraEnabled
+        public decimal creditNumber;
+        @AuraEnabled
+        public string programTitle;
+        @AuraEnabled
+        public string activityType;
+        @AuraEnabled
+        public string educationProvider;
+        
     }
   
 }

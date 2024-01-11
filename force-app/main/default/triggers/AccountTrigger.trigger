@@ -1,3 +1,3 @@
-trigger AccountTrigger on Account (after insert) {	
+trigger AccountTrigger on Account (after insert) {  
     
 }

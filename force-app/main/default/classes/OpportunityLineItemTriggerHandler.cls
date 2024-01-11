@@ -24,6 +24,8 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
                 if(oli.Use_End_Date__c){
                     oli.Start_Date__c = oli.End_Date__c;
                 }
+                   
+                
             }
         }
     }
@@ -36,8 +38,9 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     }
  
     public void AfterInsert(Map<Id, SObject> newItems) {
-        System.debug('OpportunityLineItemTriggerHandler|AfterInsert|start:  ');
-       
+        System.debug('OpportunityLineItemTriggerHandler|AfterInsert|start:  ');    
+        
+        
         createContractLineItems((Map<Id, OpportunityLineItem >)newItems);
         Set<String> setOppIds = new Set<String>();
         for(Id ids : newItems.keySet()){
@@ -67,8 +70,8 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
             
             OpportunityLineItemTriggerHandler.isBypassTrigger = true;
         	//updateOpportunityLineItemScheduleAfterUpdate((Map<Id, OpportunityLineItem>)newItems, (Map<Id, OpportunityLineItem>)oldItems);
-            updateContractLineItems((Map<Id, OpportunityLineItem >)newItems ,(Map<Id, OpportunityLineItem >)oldItems);            
-            
+            updateContractLineItems((Map<Id, OpportunityLineItem >)newItems ,(Map<Id, OpportunityLineItem >)oldItems);
+           
         }
         
     }
@@ -153,7 +156,7 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description  createing Contract Line Item after insert  Opportunity Line 
 	*/
     private void createContractLineItems(Map<Id, OpportunityLineItem > newItems){
-        
+        System.debug('Came in this part 1');
         Set<String> opportunityIds = new Set<String>();
         Map<String, List<OpportunityLineItem>> opportunityIdWithOpportunityLineItemsMap = new Map<String, List<OpportunityLineItem>>();
         Map<Id,OpportunityLineItem> newOLIs = new Map<Id,OpportunityLineItem>([SELECT Id, OpportunityId, Ad_Size2__c, Brand__c, CurrencyISOCode, Discount_Percent__c, End_Date__c, Description, ListPrice, ProductCode, Product2.Family, Product2.Name, Quantity, Rate_Type__c, Region__c, UnitPrice, Start_Date__c, TotalPrice FROM OpportunityLineItem WHERE Id IN : newItems.keySet()]);
@@ -187,7 +190,7 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description after inserting  Contract  Line Item, update Opportunity Line Items field name 'Contract Line Item' with Contract Line Iiemt Id
 	*/
     private void updateOpportunityLineItems(List<Contract_Line_Item__c> contractLineItems , Set<Id> opportunityLineItemIds){
-
+         System.debug('Came in this part 2');
         Map<Id, OpportunityLineItem> opportunityLineItemIdWithopportunityLineItemObjMap = new Map<Id, OpportunityLineItem>([SELECT Id, Contract_Line_Item__c FROM OpportunityLineItem WHERE Id =:opportunityLineItemIds]);
                                                                                 
         List<OpportunityLineItem> opportunityLineItems = new  List<OpportunityLineItem>();
@@ -211,7 +214,7 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description update Contract  Line Iiemt  after  update Opportunity Line Items 
 	*/
     private void updateContractLineItems(Map<Id, OpportunityLineItem > newItems , Map<Id, OpportunityLineItem > oldItems){
-    
+         System.debug('Came in this part 3');
         Set<String> opportunityLineItemIds = new Set<String>();
         Set<Id> contractLineItemIdsForDeleteContractLineItemSchedul = new Set<Id>();
         Set<String> contractLineItemIds = new Set<String>();
@@ -284,10 +287,13 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
                 contractLineItemObj.Line_Description__c = opportunityLineItemObj.Description;
                 contractLineItemObj.Rate_Type__c = opportunityLineItemObj.Rate_Type__c;
                 contractLineItemObj.Total_Price__c = opportunityLineItemObj.TotalPrice;
+                system.debug('Inside For contractLineItemObj total Price---'+contractLineItemObj.Total_Price__c);
+                system.debug('Inside For opportunityLineItemObj total Price---'+opportunityLineItemObj.TotalPrice);
 
             }
 
         }
+        system.debug('Before contractLineItemObj update total Price---'+contractLineItems);
         update contractLineItems;
         createOpportunityLineItemSchedule(opportunityLineItemIds,opportunityLineItemIdWithIsAdSize2Change);
     
@@ -296,7 +302,7 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description delete  Contract  Line Iemts if  Opportunity Line Item end date not in past and opportunity (RT: HIMSS_Media)
 	*/
     private void deleteContractLineItems(Map<Id, OpportunityLineItem > oldItems ){
-       
+        System.debug('Came in this part 4');
         Set<String> opportunityLineItemIds = new Set<String>();
         for(OpportunityLineItem OpportunityLineItemObj : [SELECT Id,End_Date__c FROM OpportunityLineItem
                                                             WHERE Id =: oldItems.keySet()
@@ -323,6 +329,7 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
 	*/
     @future
     private Static void createOpportunityLineItemSchedule(Set<String> opportunityLineItemIds,  Map<Id,Boolean> opportunityLineItemIdWithIsAdSize2Change){
+         System.debug('Came in this part 5');
         System.debug('OpportunityLineItemTriggerHandler|createOpportunityLineItemSchedule|start:  ');
         System.debug('OpportunityLineItemTriggerHandler|createOpportunityLineItemSchedule|opportunityLineItemIds:  ' + opportunityLineItemIds);
         System.debug('OpportunityLineItemTriggerHandler|createOpportunityLineItemSchedule|opportunityLineItemIdWithIsAdSize2Change:  ' + opportunityLineItemIdWithIsAdSize2Change);
@@ -382,10 +389,111 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
             OpportunityLineItemTriggerHandler.isBypassTrigger = true;
             OpportunityLineItemScheduleTrigHandler.isBypassOpportunityLineItemScheduleTrigger = true;
 
-            deleteContractLineItemsSchedule(contractLineItemIds);
-            insert opportunityLineItemScheduleList;
+            deleteContractLineItemsSchedule(contractLineItemIds);            
+           // insert opportunityLineItemScheduleList;
+            
+            //New Code-Start
+            Map<string,Contract_Line_Item__c> allContractLineItems=new Map<string,Contract_Line_Item__c>();
+            List<Contract_Line_Item_Schedule__c> contractLineItemScheduleList = new List<Contract_Line_Item_Schedule__c>();
+            Map<Id, List<OpportunityLineItemSchedule>> opportunityLineItemScheduleMap = new Map<Id, List<OpportunityLineItemSchedule>>();
 
-            createContractLineItemSchedule(contractLineItemIds, opportunityLineItemScheduleList);  
+            for(OpportunityLineItemSchedule opportunityLineItemScheduleObj :opportunityLineItemScheduleList)
+            {
+                if(!opportunityLineItemScheduleMap.containsKey(opportunityLineItemScheduleObj.OpportunityLineItemId)){
+                    opportunityLineItemScheduleMap.put(opportunityLineItemScheduleObj.OpportunityLineItemId, new List<OpportunityLineItemSchedule>());
+                }
+                opportunityLineItemScheduleMap.get(opportunityLineItemScheduleObj.OpportunityLineItemId).add(opportunityLineItemScheduleObj);
+            }
+            
+            List<Contract_Line_Item__c> contractLineItem=[select Id,Opportunity_Line_Item_Id__c,Total_Price__c,Sales_Price__c from Contract_Line_Item__c WHERE Id=:contractLineItemIds];
+            List<OpportunityLineItemSchedule> finalOppLineItemScheduleList=new List<OpportunityLineItemSchedule>();    
+         
+            for(Contract_Line_Item__c tempItems:contractLineItem)
+            {
+            System.debug('Came inside contract loop---'+tempItems.ID);
+            Double price=tempItems.Total_Price__c;            
+            List<Contract_Line_Item_Schedule__c> contractLineITemSchedule=[select ID,Extended_Amount__c,Billing_Date__c,Date__c,Amount__c,
+                                                                     Set_Billing_Date__c,Contract_Line_Item__c from  Contract_Line_Item_Schedule__c 
+                                                                           WHERE Contract_Line_Item__c=:tempItems.ID];
+                
+            List<Contract_Line_Item_Schedule__c> contractLineItemList=new List<Contract_Line_Item_Schedule__c>();            
+            Integer count=0;
+            Double newPrice; 
+            //Create New List with Old contract passed month and new contract with adjusted amount---Start
+            System.debug('Came inside contract loop---contractLineITemSchedule'+contractLineITemSchedule.size());
+            if(contractLineITemSchedule.size()>0)
+            {            
+            for(Contract_Line_Item_Schedule__c tempRecord:contractLineITemSchedule)
+            {
+                 System.debug('Came inside contract loop---contractLineITemSchedule23'+tempRecord.Set_Billing_Date__c);
+               if(tempRecord.Set_Billing_Date__c==true)
+                {
+                  contractLineItemList.add(tempRecord);
+                  price=price-(tempRecord.Extended_Amount__c);
+                  count++;
+                }
+                else
+                {
+                  System.debug('Came inside this loop inner 2');
+                  
+                  contractLineItemList.add(tempRecord);   
+                }
+            } 
+               
+            Integer newcount=0;                
+             for(OpportunityLineItemSchedule itteration1:opportunityLineItemScheduleList)
+            {
+                if(itteration1.OpportunityLineItemId==tempItems.Opportunity_Line_Item_Id__c)
+                {
+                   newcount++; 
+                }
+            }
+                 System.debug('All Count Values---'+count+'----'+newcount);
+                 System.debug('New Price---'+newPrice);
+                 newPrice=price/(newcount-count);
+                
+            for(OpportunityLineItemSchedule itteration1:opportunityLineItemScheduleList)
+            {
+                if(itteration1.OpportunityLineItemId==tempItems.Opportunity_Line_Item_Id__c)
+                {
+                    for(Contract_Line_Item_Schedule__c itteration2:contractLineITemSchedule)
+                    {
+                        if(itteration2.Date__c==itteration1.ScheduleDate)
+                        {
+                            itteration1.Revenue=itteration2.Amount__c;
+                            finalOppLineItemScheduleList.add(itteration1);
+                        }
+                        else
+                        {
+                           itteration1.revenue= newPrice;    
+                           finalOppLineItemScheduleList.add(itteration1); 
+                        }
+                    }
+                   
+                }
+            }
+            
+                
+            }
+            else
+            {
+              for(OpportunityLineItemSchedule itteration1:opportunityLineItemScheduleList)
+            {
+                if(itteration1.OpportunityLineItemId==tempItems.Opportunity_Line_Item_Id__c) 
+                {
+                  finalOppLineItemScheduleList.add(itteration1);  
+                }
+            }            
+                
+            }
+            }
+            System.debug('All Values---'+finalOppLineItemScheduleList);
+            insert  finalOppLineItemScheduleList; 
+            //New Code End
+            
+            //insert opportunityLineItemScheduleList;
+            createContractLineItemSchedule(contractLineItemIds, opportunityLineItemScheduleList); 
+            
         }
     }
     
@@ -393,11 +501,11 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description creating Contract Line Item Schedule recoreds after insert and update Opportunity Line Item 
 	*/
     public static void createContractLineItemSchedule(Set<Id> contractLineItemIds , List<OpportunityLineItemSchedule> opportunityLineItemScheduleList){
-        
+         System.debug('Came in this part 6');
         Map<Id, List<OpportunityLineItemSchedule>> opportunityLineItemScheduleMap = new Map<Id, List<OpportunityLineItemSchedule>>();
 
         for(OpportunityLineItemSchedule opportunityLineItemScheduleObj : [SELECT Id ,Revenue,  OpportunityLineItem.OpportunityId, OpportunityLineItemId,ScheduleDate, 
-                                                                                OpportunityLineItem.UnitPrice,
+                                                                                OpportunityLineItem.UnitPrice,Type,
                                                                                 OpportunityLineItem.Rate_Type__c
                                                                                 FROM OpportunityLineItemSchedule
                                                                                 WHERE Id =: opportunityLineItemScheduleList])
@@ -407,15 +515,16 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
                 }
                 opportunityLineItemScheduleMap.get(opportunityLineItemScheduleObj.OpportunityLineItemId).add(opportunityLineItemScheduleObj);
             }
-
+        Map<string,Contract_Line_Item__c> allContractLineItems=new Map<string,Contract_Line_Item__c>();
         List<Contract_Line_Item_Schedule__c> contractLineItemScheduleList = new List<Contract_Line_Item_Schedule__c>();
-
+        //Added by Sulabh
+        set<string> allIds=new set<string>();
         for(Contract_Line_Item__c contractLineItemObj : [SELECT Id,Opportunity_Line_Item_Id__c, Start_Date__c,
                                                             End_Date__c,Discount__c,Quantity__c
                                                          FROM Contract_Line_Item__c
                                                          WHERE  Id =: contractLineItemIds])
             {
-                                   
+                allContractLineItems.put(contractLineItemObj.Id,contractLineItemObj);                  
                 if(opportunityLineItemScheduleMap.containsKey(contractLineItemObj.Opportunity_Line_Item_Id__c)){
 
                     
@@ -446,21 +555,102 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
                             contractLineItemScheduleObj.Quantity__c = 0;
                         }  
                         contractLineItemScheduleList.add(contractLineItemScheduleObj);
+                        system.debug('Line 470 contractLineItemScheduleObj'+contractLineItemScheduleObj.Contract_Line_Item__c+'---'+contractLineItemScheduleObj.Amount__c);
+                        allIds.add(contractLineItemScheduleObj.Contract_Line_Item__c);
                     }
                 }
             }
         if(!contractLineItemScheduleList.isEmpty()){
-            upsert contractLineItemScheduleList;
-        }
+           
+            //Sulabh Logic To be added
+            List<Contract_Line_Item__c> contractLineItem=[select Id,Total_Price__c,Sales_Price__c from Contract_Line_Item__c WHERE Id=:allIds];
+            List<Contract_Line_Item_Schedule__c> finalContractLineItemList=new List<Contract_Line_Item_Schedule__c>();            
+            for(Contract_Line_Item__c tempItems:contractLineItem)
+            {
+            Double price=tempItems.Total_Price__c;            
+            List<Contract_Line_Item_Schedule__c> contractLineITemSchedule=[select ID,Extended_Amount__c,Billing_Date__c,Date__c,Amount__c,
+                                                                     Set_Billing_Date__c,Contract_Line_Item__c from  Contract_Line_Item_Schedule__c 
+                                                                           WHERE Contract_Line_Item__c=:tempItems.ID];
+            List<Contract_Line_Item_Schedule__c> contractLineItemList=new List<Contract_Line_Item_Schedule__c>();            
+            Integer count=0; 
+            //Create New List with Old contract passed month and new contract with adjusted amount---Start
+            if(contractLineITemSchedule.size()>0)
+            {            
+            for(Contract_Line_Item_Schedule__c tempRecord:contractLineItemScheduleList)
+            { 
+                if(tempRecord.Contract_Line_Item__c==tempItems.Id){
+                for(Contract_Line_Item_Schedule__c individualContractSchedule:contractLineITemSchedule)
+                {
+                
+                if(tempRecord.Date__c==individualContractSchedule.Date__c && individualContractSchedule.Set_Billing_Date__c==true)
+                {
+                  contractLineItemList.add(individualContractSchedule);
+                  price=price-(individualContractSchedule.Extended_Amount__c);
+                }
+                else if(individualContractSchedule.Contract_Line_Item__c==tempItems.Id)
+                {
+                  count++;
+                  contractLineItemList.add(tempRecord);   
+                }
+                }
+                }
+            }               
+            
+            Double newPrice; 
+            if(count!=0)
+            {
+              System.debug('Price and Count----'+Price+'-----'+count);
+              newPrice= price/count;
+                system.debug('New Price--'+newPrice);
+            }
+           
+            for(Contract_Line_Item_Schedule__c tempRecord:contractLineItemList)
+            {
+                if(tempRecord.Set_Billing_Date__c==false)
+                {
+                   tempRecord.Amount__c=newPrice;
+                    System.debug('tempRecord.Amount__c----'+tempRecord.Amount__c);
+                   tempRecord.Quantity__c=1; 
+                    System.debug('tempRecord.Quantity__c----'+tempRecord.Quantity__c);
+                   finalContractLineItemList.add(tempRecord); 
+                }
+                else
+                {
+                 finalContractLineItemList.add(tempRecord);   
+                }
+            }              
+            }
+            }
+            //Create New List with Old contract passed month and new contract with adjusted amount---End
+          
+            if(finalContractLineItemList.size()>0)
+            {          
+                 upsert finalContractLineItemList;          
+           
+            }
+            
+            else
+            {     
+                System.debug('Line 561-----'+contractLineItemScheduleList);
+                upsert contractLineItemScheduleList;
+            }            
+            
+            
+        }      
+        
+        
     }
+    
+    
      /**
     * @description delete  Opportunit Line Item Schedule and Contract Line Item Schedule  after updating Opportunit Line Item
         */
         public static void deleteOpportunityLineItemAndContractLineItemsSchedule(Set<String> opportunityLineItemIds , Set<Id> contractLineItemIdsForDeleteContractLineItemSchedul){
-            
+          System.debug('Came in this part 7');   
         // deltete OpportunityLineItemSchedule
         List<OpportunityLineItemSchedule>  opportunityLineItemScheduleList = [SELECT Id FROM OpportunityLineItemSchedule 
         WHERE OpportunityLineItemId =: opportunityLineItemIds];
+            System.debug('Inside OpportunityLineItemTriggerHandler Delete Mathod ----'+opportunityLineItemScheduleList);
         
         /*if(!opportunityLineItemScheduleList.isEmpty()){
           delete opportunityLineItemScheduleList;         
@@ -472,13 +662,17 @@ public class OpportunityLineItemTriggerHandler implements TriggerHandlerInterfac
     * @description delete   Contract Line Item Schedule  after update Opportunit Line Item
         */
     public static void deleteContractLineItemsSchedule(Set<Id> contractLineItemIds){
+         System.debug('Came in this part 8');
         //delete Contract Line Item Schedule
-        List<Contract_Line_Item_Schedule__c>  contractLineItemScheduleList = [SELECT Id, Contract_Line_Item__c,Contract_Line_Item__r.Contract__r.Opportunity__c 
+        List<Contract_Line_Item_Schedule__c>  contractLineItemScheduleList = [SELECT Id, Contract_Line_Item__c,Contract_Line_Item__r.Contract__r.Opportunity__c, Billing_Date__c, Set_Billing_Date__c 
                                                                             FROM Contract_Line_Item_Schedule__c 
                                                                             WHERE Contract_Line_Item__c=: contractLineItemIds];
         if(!contractLineItemScheduleList.isEmpty()){
-
-            delete contractLineItemScheduleList;
+        for (Contract_Line_Item_Schedule__c contractLineItemSchedule : contractLineItemScheduleList) {
+        	if(contractLineItemSchedule.Billing_Date__c > Date.Today() || contractLineItemSchedule.Billing_Date__c ==null){
+               delete contractLineItemSchedule; 
+            }
+        }
         }
     } 
 }
